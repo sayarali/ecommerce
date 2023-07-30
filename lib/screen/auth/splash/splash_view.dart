@@ -31,5 +31,13 @@ class _SplashViewState extends BaseState<SplashView> {
         viewModel: SplashViewModel());
   }
 
-  Widget get scaffoldBody => const Scaffold();
+  Widget get scaffoldBody => Scaffold(
+    body: Center(
+      child: Image.asset(
+        'assets/loading.gif',
+        width: 180,
+        color: Colors.orange,
+      ),
+    ),
+  );
 }
