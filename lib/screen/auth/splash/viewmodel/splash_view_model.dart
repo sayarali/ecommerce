@@ -1,4 +1,6 @@
 import 'package:ecommerce/core/base/model/base_view_model.dart';
+import 'package:ecommerce/core/service/firebase_service.dart';
+import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:mobx/mobx.dart';
 
@@ -7,6 +9,7 @@ part 'splash_view_model.g.dart';
 class SplashViewModel = SplashViewModelBase with _$SplashViewModel;
 
 abstract class SplashViewModelBase with Store, BaseViewModel {
+  User user;
   @override
   void setContext(BuildContext context) {
     viewModelContext = context;
@@ -14,9 +17,20 @@ abstract class SplashViewModelBase with Store, BaseViewModel {
 
   @override
   void init() {
+    FirebaseAuth.instance.authStateChanges().listen((user) {
+      if(user != null){
+        Future.delayed(const Duration(seconds: 3)).whenComplete(() => goToHome());
+      } else {
+        Future.delayed(const Duration(seconds: 3)).whenComplete(() => goToLogin());
+      }
+    });
+
   }
 
   void goToLogin(){
-    navigation.navigateToPage("/login_view");
+    navigation.navigateToPageRemoveUntil("/login_view", null);
+  }
+  void goToHome(){
+    navigation.navigateToPageRemoveUntil("/home_view", null);
   }
 }

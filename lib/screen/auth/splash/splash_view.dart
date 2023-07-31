@@ -21,23 +21,29 @@ class _SplashViewState extends BaseState<SplashView> {
   }
 
   @override
+  void dispose() {
+    super.dispose();
+  }
+
+  @override
   Widget build(BuildContext context) {
     return BaseView<SplashViewModel>(
         onPageBuilder: (context, value) => scaffoldBody,
         onModelReady: (model) {
           model.setContext(context);
           viewModel = model;
+          model.init();
         },
         viewModel: SplashViewModel());
   }
 
   Widget get scaffoldBody => Scaffold(
-    body: Center(
-      child: Image.asset(
-        'assets/loading.gif',
-        width: 180,
-        color: Colors.orange,
-      ),
-    ),
-  );
+        body: Center(
+          child: Image.asset(
+            'assets/loading.gif',
+            width: 180,
+            color: themeData.primaryColor,
+          ),
+        ),
+      );
 }

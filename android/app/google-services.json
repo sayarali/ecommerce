@@ -1,0 +1,55 @@
+{
+  "project_info": {
+    "project_number": "27975256039",
+    "firebase_url": "https://ecommerce-bbcf0-default-rtdb.europe-west1.firebasedatabase.app",
+    "project_id": "ecommerce-bbcf0",
+    "storage_bucket": "ecommerce-bbcf0.appspot.com"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:27975256039:android:926a616bd5017d50995f42",
+        "android_client_info": {
+          "package_name": "com.alisayar.ecommerce"
+        }
+      },
+      "oauth_client": [
+        {
+          "client_id": "27975256039-npeg9gcc6icasabotqqd6miljbgimqqn.apps.googleusercontent.com",
+          "client_type": 1,
+          "android_info": {
+            "package_name": "com.alisayar.ecommerce",
+            "certificate_hash": "4356c2d621536c87296e88d38aeb858c61617dfb"
+          }
+        },
+        {
+          "client_id": "27975256039-n7s7snmv33gnnoc3v2lac7otcei226rn.apps.googleusercontent.com",
+          "client_type": 3
+        }
+      ],
+      "api_key": [
+        {
+          "current_key": "AIzaSyBqbQRIEBx4isn9IDmqbVTVp3OP3bfSk10"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": [
+            {
+              "client_id": "27975256039-n7s7snmv33gnnoc3v2lac7otcei226rn.apps.googleusercontent.com",
+              "client_type": 3
+            },
+            {
+              "client_id": "27975256039-c8k3fimu4udlt3u55kvo58pb04g391g9.apps.googleusercontent.com",
+              "client_type": 2,
+              "ios_info": {
+                "bundle_id": "com.alisayar.ecommerce"
+              }
+            }
+          ]
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}
