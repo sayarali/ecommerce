@@ -1,11 +1,14 @@
-
+import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 
+import '../model/user_model.dart';
+
 class FirebaseService {
-
   final FirebaseAuth _auth = FirebaseAuth.instance;
+  final CollectionReference usersCollection =
+      FirebaseFirestore.instance.collection('users');
 
-  //Sign In
+  //Giriş
   Future<User> signIn(String email, String password) async {
     try {
       UserCredential userCredential = await _auth.signInWithEmailAndPassword(
@@ -32,10 +35,11 @@ class FirebaseService {
     }
   }
 
-  //Sign Up
+  //Kayıt
   Future<User> signUp(String email, String password) async {
     try {
-      UserCredential userCredential = await _auth.createUserWithEmailAndPassword(
+      UserCredential userCredential =
+          await _auth.createUserWithEmailAndPassword(
         email: email.trim(),
         password: password.trim(),
       );
@@ -59,14 +63,53 @@ class FirebaseService {
     }
   }
 
-  //Sign Out
+  //Çıkış
   Future<void> signOut() async {
     await _auth.signOut();
   }
 
-
   // Kullanıcı oturum açmış mı kontrolü
   Stream<User> get authStateChanges => _auth.authStateChanges();
 
+  //Kullanıcıyı FireStore'a kaydetme
+  Future<void> addUser(UserModel user) async {
+    try {
+      await usersCollection.doc(user.userId).set(user.toJson());
+    } catch (e) {
+      throw Exception('Kullanıcı eklenirken bir hata oluştu: $e');
+    }
+  }
 
+  //E-posta Doğrulama
+  Future<String> sendVerificationEmail() async {
+    if (_auth.currentUser != null && !_auth.currentUser.emailVerified) {
+      try {
+        await _auth.currentUser.sendEmailVerification();
+        return "Doğrulama e-postası gönderildi. Lütfen e-postanızı kontrol edin.";
+      } catch (e) {
+        throw Exception(
+            "Doğrulama e-postası gönderilirken bir hata oluştu: $e");
+      }
+    } else {
+      return "Kullanıcı zaten oturum açmış veya e-postası doğrulanmış.";
+    }
+  }
+
+  Future<User> getCurrentUser() async {
+    try {
+      User user = _auth.currentUser;
+      if (user != null) {
+        // Kullanıcı oturum açmışsa, kullanıcıyı döndür
+        return user;
+      } else {
+        // Kullanıcı oturum açmamışsa null döndür
+        print("Kullanıcı oturum açmamış.");
+        return null;
+      }
+    } catch (e) {
+      // Hata durumunda null döndür ve hatayı yazdır
+      print("Kullanıcı alınırken bir hata oluştu: $e");
+      return null;
+    }
+  }
 }
