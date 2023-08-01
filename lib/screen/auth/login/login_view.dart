@@ -172,7 +172,7 @@ class _LoginViewState extends BaseState<LoginView> {
                       ),
                       TextButton(
                         onPressed: () {
-                          Navigator.pushNamed(context, "/register_page");
+                          viewModel.goRegisterView();
                         },
                         child: const Text(
                           "Kayıt Olun!",
