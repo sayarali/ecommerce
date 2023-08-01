@@ -19,9 +19,9 @@ abstract class SplashViewModelBase with Store, BaseViewModel {
   void init() {
     FirebaseService().authStateChanges.listen((user) {
       if(user != null){
-        Future.delayed(const Duration(seconds: 3)).whenComplete(() => goToHome());
+        Future.delayed(const Duration(seconds: 2)).whenComplete(() => goToHome());
       } else {
-        Future.delayed(const Duration(seconds: 3)).whenComplete(() => goToLogin());
+        Future.delayed(const Duration(seconds: 2)).whenComplete(() => goToLogin());
       }
     });
 
