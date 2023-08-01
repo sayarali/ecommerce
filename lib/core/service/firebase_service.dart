@@ -99,15 +99,12 @@ class FirebaseService {
     try {
       User user = _auth.currentUser;
       if (user != null) {
-        // Kullanıcı oturum açmışsa, kullanıcıyı döndür
         return user;
       } else {
-        // Kullanıcı oturum açmamışsa null döndür
         print("Kullanıcı oturum açmamış.");
         return null;
       }
     } catch (e) {
-      // Hata durumunda null döndür ve hatayı yazdır
       print("Kullanıcı alınırken bir hata oluştu: $e");
       return null;
     }
