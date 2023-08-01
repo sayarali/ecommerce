@@ -42,7 +42,6 @@ abstract class LoginViewModelBase with Store, BaseViewModel {
           emailController.text,
           passwordController.text,
         );
-        print(await user.getIdToken());
       } catch(e){
         ScaffoldMessenger.of(viewModelContext).showSnackBar(SnackBar(content: Text(e.toString())));
         closeProgress();
