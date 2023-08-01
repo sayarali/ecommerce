@@ -53,7 +53,7 @@ abstract class LoginViewModelBase with Store, BaseViewModel {
       if(passwordController.text == "") passwordError = true;
     }
   }
-
+  void goRegisterView() => navigation.navigateToPage("/register_view");
   showProgress() => AppProgress.showProgress(viewModelContext);
   closeProgress() => AppProgress.closeProgress(viewModelContext);
 }
