@@ -1,5 +1,7 @@
 import 'package:ecommerce/core/base/model/base_view_model.dart';
+import 'package:ecommerce/core/model/user_model.dart';
 import 'package:ecommerce/core/service/firebase_service.dart';
+import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 import 'package:mobx/mobx.dart';
 
@@ -47,8 +49,20 @@ abstract class RegisterViewModelBase with Store, BaseViewModel {
         lastNameController.text != "") {
       showProgress();
       try {
-        await FirebaseService().signUp(emailController.text, passwordCheckController.text);
+        User user = await FirebaseService().signUp(emailController.text, passwordCheckController.text);
+        UserModel userModel = UserModel(
+          userId: user.uid,
+          name: nameController.text,
+          lastName: lastNameController.text,
+          email: emailController.text,
+          phoneNumber: "",
+          address: ""
+        );
+        await FirebaseService().addUser(userModel);
+        String sendEmailMessage = await FirebaseService().sendVerificationEmail();
+        ScaffoldMessenger.of(viewModelContext).showSnackBar(SnackBar(content: Text(sendEmailMessage)));
       } catch(e){
+        print(e);
         ScaffoldMessenger.of(viewModelContext).showSnackBar(SnackBar(content: Text(e.toString())));
         closeProgress();
       }
