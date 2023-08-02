@@ -1,6 +1,7 @@
 import 'package:ecommerce/core/base/view/base_view.dart';
 import 'package:ecommerce/core/components/gradiant_box.dart';
 import 'package:ecommerce/core/components/text_field/custom_text_field.dart';
+import 'package:ecommerce/core/service/firebase_service.dart';
 import 'package:ecommerce/screen/auth/login/viewmodel/login_view_model.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_mobx/flutter_mobx.dart';
@@ -97,6 +98,38 @@ class _LoginViewState extends BaseState<LoginView> {
                         "Sosyal medya ile devam et",
                         style: TextStyle(color: Colors.white70),
                       )),
+                  Row(
+                    mainAxisAlignment: MainAxisAlignment.center,
+                    children: [
+                      Container(
+                        margin: EdgeInsets.all(4),
+                        decoration: BoxDecoration(
+                            color: themeData.primaryColor,
+                            borderRadius: BorderRadius.circular(50)),
+                        child: IconButton(
+                          onPressed: () {
+                            viewModel.signInWithGoogle();
+                          },
+                          icon: Image.asset(
+                            "assets/google.png",
+                          ),
+                        ),
+                      ),
+                      Container(
+                          margin: EdgeInsets.all(4),
+                          decoration: BoxDecoration(
+                              color: Colors.orange,
+                              borderRadius: BorderRadius.circular(50)),
+                          child: IconButton(
+                            onPressed: () {
+                              viewModel.signInWithFacebook();
+                            },
+                            icon: Image.asset(
+                              "assets/facebook.png",
+                            ),
+                          )),
+                    ],
+                  ),
                 ],
               ),
             )
@@ -160,7 +193,7 @@ class _LoginViewState extends BaseState<LoginView> {
       alignment: Alignment.centerRight,
       child: TextButton(
         onPressed: () {
-          Navigator.of(context).pushNamed("/forgot_password_view");
+          viewModel.goForgotPasswordView();
         },
         child: const Text("Parolanızı mı unuttunuz?"),
       ),
@@ -184,8 +217,8 @@ class _LoginViewState extends BaseState<LoginView> {
         hintText: "Parola",
         suffixIcon: IconButton(
           icon: Icon(viewModel.passwordVisibility != true
-              ? Icons.visibility
-              : Icons.visibility_off),
+              ? Icons.visibility_off
+              : Icons.visibility),
           onPressed: () {
             viewModel.passwordVisibility = !viewModel.passwordVisibility;
           },

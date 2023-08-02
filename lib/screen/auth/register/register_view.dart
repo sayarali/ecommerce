@@ -137,8 +137,8 @@ class _RegisterViewState extends BaseState<RegisterView> {
       prefixIcon: const Icon(Icons.lock_outline),
       suffixIcon: IconButton(
         icon: Icon(viewModel.passwordCheckVisibility != true
-            ? Icons.visibility
-            : Icons.visibility_off),
+            ? Icons.visibility_off
+            : Icons.visibility),
         onPressed: () {
           viewModel.passwordCheckVisibility =
               !viewModel.passwordCheckVisibility;
@@ -164,8 +164,8 @@ class _RegisterViewState extends BaseState<RegisterView> {
       prefixIcon: const Icon(Icons.lock_outline),
       suffixIcon: IconButton(
         icon: Icon(viewModel.passwordVisibility != true
-            ? Icons.visibility
-            : Icons.visibility_off),
+            ? Icons.visibility_off
+            : Icons.visibility),
         onPressed: () {
           viewModel.passwordVisibility = !viewModel.passwordVisibility;
         },

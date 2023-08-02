@@ -1,5 +1,6 @@
 import 'package:ecommerce/core/base/model/base_view_model.dart';
 import 'package:ecommerce/core/components/app_progress.dart';
+import 'package:ecommerce/core/model/user_model.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
@@ -51,7 +52,44 @@ abstract class LoginViewModelBase with Store, BaseViewModel {
       if(passwordController.text == "") passwordError = true;
     }
   }
+  void signInWithGoogle() async {
+    try{
+      showProgress();
+      UserCredential user = await FirebaseService().signInWithGoogle();
+      UserModel userModel = UserModel(
+        userId: user.user.uid,
+        name: user.user.displayName,
+        lastName: "",
+        email: user.user.email,
+        phoneNumber: user.user.phoneNumber,
+        address: "",
+      );
+      await FirebaseService().addUser(userModel);
+    } catch (e){
+      closeProgress();
+      ScaffoldMessenger.of(viewModelContext).showSnackBar(SnackBar(content: Text(e.toString())));
+    }
+  }
+  void signInWithFacebook() async {
+    try{
+      showProgress();
+      UserCredential user = await FirebaseService().signInWithFacebook();
+      UserModel userModel = UserModel(
+        userId: user.user.uid,
+        name: user.user.displayName,
+        lastName: "",
+        email: user.user.email,
+        phoneNumber: user.user.phoneNumber,
+        address: "",
+      );
+      await FirebaseService().addUser(userModel);
+    } catch (e){
+      closeProgress();
+      ScaffoldMessenger.of(viewModelContext).showSnackBar(SnackBar(content: Text(e.toString())));
+    }
+  }
   void goRegisterView() => navigation.navigateToPage("/register_view");
+  void goForgotPasswordView() => navigation.navigateToPage("/forgot_password_view");
   showProgress() => AppProgress.showProgress(viewModelContext);
   closeProgress() => AppProgress.closeProgress(viewModelContext);
 }

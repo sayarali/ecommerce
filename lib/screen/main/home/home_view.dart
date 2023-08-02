@@ -32,7 +32,7 @@ class _HomeViewState extends BaseState<HomeView> {
             mainAxisAlignment: MainAxisAlignment.center,
             crossAxisAlignment: CrossAxisAlignment.center,
             children: [
-          Observer(builder: (context) {
+          Observer(builder: (_) {
             return Text(viewModel.user.email);
           }),
           ElevatedButton(onPressed: (){

@@ -1,5 +1,7 @@
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:firebase_auth/firebase_auth.dart';
+import 'package:flutter_facebook_auth/flutter_facebook_auth.dart';
+import 'package:google_sign_in/google_sign_in.dart';
 
 import '../model/user_model.dart';
 
@@ -66,6 +68,8 @@ class FirebaseService {
   //Çıkış
   Future<void> signOut() async {
     await _auth.signOut();
+    await GoogleSignIn().signOut();
+    await FacebookAuth.instance.logOut();
   }
 
   // Kullanıcı oturum açmış mı kontrolü
@@ -95,6 +99,23 @@ class FirebaseService {
     }
   }
 
+  //Parola Sıfırlama
+  Future<void> sendPasswordResetEmail(String email) async {
+    try {
+      await FirebaseAuth.instance.sendPasswordResetEmail(email: email);
+    } on FirebaseAuthException catch (e) {
+      if (e.code == 'invalid-email') {
+        throw 'Geçersiz e-posta adresi, lütfen doğru bir e-posta adresi girin.';
+      } else if (e.code == 'user-not-found') {
+        throw 'Bu e-posta adresine sahip bir kullanıcı bulunamadı.';
+      } else {
+        throw 'Parolamı sıfırlama e-postası gönderilemedi: $e';
+      }
+    } catch (e) {
+      throw 'Bir hata oluştu: $e';
+    }
+  }
+
   Future<User> getCurrentUser() async {
     try {
       User user = _auth.currentUser;
@@ -107,6 +128,34 @@ class FirebaseService {
     } catch (e) {
       print("Kullanıcı alınırken bir hata oluştu: $e");
       return null;
+    }
+  }
+
+  Future<UserCredential> signInWithGoogle() async {
+    try {
+      final GoogleSignInAccount googleUser = await GoogleSignIn().signIn();
+
+      final GoogleSignInAuthentication googleAuth = await googleUser.authentication;
+      final credential = GoogleAuthProvider.credential(
+        accessToken: googleAuth.accessToken,
+        idToken: googleAuth.idToken,
+      );
+      return await FirebaseAuth.instance.signInWithCredential(credential);
+    } catch(e) {
+      throw "Google ile giriş yapılamadı, lütfen tekrar deneyiniz.";
+    }
+
+  }
+
+  Future<UserCredential> signInWithFacebook() async {
+    try {
+      final LoginResult loginResult = await FacebookAuth.instance.login();
+
+      final OAuthCredential facebookAuthCredential = FacebookAuthProvider.credential(loginResult.accessToken.token);
+
+      return FirebaseAuth.instance.signInWithCredential(facebookAuthCredential);
+    } catch(e) {
+      throw "Facebook ile giriş yapılamadı, lütfen tekrar deneyiniz";
     }
   }
 }

@@ -1,4 +1,5 @@
 import 'package:ecommerce/core/constants/navigation/navigation_constants.dart';
+import 'package:ecommerce/screen/auth/forgotpassword/forgot_password_view.dart';
 import 'package:ecommerce/screen/auth/login/login_view.dart';
 import 'package:ecommerce/screen/auth/register/register_view.dart';
 import 'package:ecommerce/screen/auth/splash/splash_view.dart';
@@ -20,6 +21,8 @@ class NavigationRoute {
         return normalNavigate(const LoginView());
       case NavigationConstants.REGISTER_VIEW:
         return normalNavigate(const RegisterView());
+      case NavigationConstants.FORGOT_PASSWORD_VIEW:
+        return normalNavigate(const ForgotPasswordView());
       case NavigationConstants.HOME_VIEW:
         return normalNavigate(const HomeView());
       default:
