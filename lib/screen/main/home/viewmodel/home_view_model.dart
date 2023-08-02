@@ -10,6 +10,7 @@ part 'home_view_model.g.dart';
 class HomeViewModel = HomeViewModelBase with _$HomeViewModel;
 
 abstract class HomeViewModelBase with Store, BaseViewModel {
+  FirebaseService firebaseService = FirebaseService();
   @observable
   User user;
   @override
@@ -21,9 +22,8 @@ abstract class HomeViewModelBase with Store, BaseViewModel {
     getUser();
   }
   void signOut() async {
-    print("object");
     showProgress();
-    await FirebaseService().signOut();
+    await firebaseService.signOut();
   }
   void getUser() async {
     user = await FirebaseService().getCurrentUser();

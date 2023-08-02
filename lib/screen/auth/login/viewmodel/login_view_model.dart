@@ -56,10 +56,11 @@ abstract class LoginViewModelBase with Store, BaseViewModel {
     try{
       showProgress();
       UserCredential user = await FirebaseService().signInWithGoogle();
+      List<String> name = user.user.displayName.split(" ");
       UserModel userModel = UserModel(
         userId: user.user.uid,
-        name: user.user.displayName,
-        lastName: "",
+        name: name.removeLast(),
+        lastName: name.last,
         email: user.user.email,
         phoneNumber: user.user.phoneNumber,
         address: "",
@@ -74,10 +75,11 @@ abstract class LoginViewModelBase with Store, BaseViewModel {
     try{
       showProgress();
       UserCredential user = await FirebaseService().signInWithFacebook();
+      List<String> name = user.user.displayName.split(" ");
       UserModel userModel = UserModel(
         userId: user.user.uid,
-        name: user.user.displayName,
-        lastName: "",
+        name: name.removeLast(),
+        lastName: name.last,
         email: user.user.email,
         phoneNumber: user.user.phoneNumber,
         address: "",
@@ -87,6 +89,9 @@ abstract class LoginViewModelBase with Store, BaseViewModel {
       closeProgress();
       ScaffoldMessenger.of(viewModelContext).showSnackBar(SnackBar(content: Text(e.toString())));
     }
+  }
+  void goToPhoneAuthView(){
+    navigation.navigateToPage("/phone_auth_view");
   }
   void goRegisterView() => navigation.navigateToPage("/register_view");
   void goForgotPasswordView() => navigation.navigateToPage("/forgot_password_view");

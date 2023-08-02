@@ -1,6 +1,8 @@
 import 'package:ecommerce/core/constants/navigation/navigation_constants.dart';
 import 'package:ecommerce/screen/auth/forgotpassword/forgot_password_view.dart';
 import 'package:ecommerce/screen/auth/login/login_view.dart';
+import 'package:ecommerce/screen/auth/phoneauth/phone_auth_view.dart';
+import 'package:ecommerce/screen/auth/phoneauth/viewmodel/phone_auth_view_model.dart';
 import 'package:ecommerce/screen/auth/register/register_view.dart';
 import 'package:ecommerce/screen/auth/splash/splash_view.dart';
 import 'package:ecommerce/screen/main/home/home_view.dart';
@@ -23,6 +25,8 @@ class NavigationRoute {
         return normalNavigate(const RegisterView());
       case NavigationConstants.FORGOT_PASSWORD_VIEW:
         return normalNavigate(const ForgotPasswordView());
+      case NavigationConstants.PHONE_AUTH_VIEW:
+        return normalNavigate(const PhoneAuthView());
       case NavigationConstants.HOME_VIEW:
         return normalNavigate(const HomeView());
       default:

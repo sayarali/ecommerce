@@ -1,3 +1,5 @@
+import 'dart:async';
+
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter_facebook_auth/flutter_facebook_auth.dart';
@@ -135,27 +137,52 @@ class FirebaseService {
     try {
       final GoogleSignInAccount googleUser = await GoogleSignIn().signIn();
 
-      final GoogleSignInAuthentication googleAuth = await googleUser.authentication;
+      final GoogleSignInAuthentication googleAuth =
+          await googleUser.authentication;
       final credential = GoogleAuthProvider.credential(
         accessToken: googleAuth.accessToken,
         idToken: googleAuth.idToken,
       );
       return await FirebaseAuth.instance.signInWithCredential(credential);
-    } catch(e) {
+    } catch (e) {
       throw "Google ile giriş yapılamadı, lütfen tekrar deneyiniz.";
     }
-
   }
 
   Future<UserCredential> signInWithFacebook() async {
     try {
       final LoginResult loginResult = await FacebookAuth.instance.login();
 
-      final OAuthCredential facebookAuthCredential = FacebookAuthProvider.credential(loginResult.accessToken.token);
+      final OAuthCredential facebookAuthCredential =
+          FacebookAuthProvider.credential(loginResult.accessToken.token);
 
       return FirebaseAuth.instance.signInWithCredential(facebookAuthCredential);
-    } catch(e) {
+    } catch (e) {
       throw "Facebook ile giriş yapılamadı, lütfen tekrar deneyiniz";
+    }
+  }
+
+  final StreamController<String> _verificationIdController = StreamController<String>();
+  Stream<String> get verificationIdStream => _verificationIdController.stream;
+
+  Future<void> sendCodeToPhoneNumber(String phoneNumber) async {
+    try {
+      await _auth.verifyPhoneNumber(
+          phoneNumber: phoneNumber,
+          codeSent: (String verificationId, int resendToken) async {
+            _verificationIdController.add(verificationId);
+          },
+          timeout: const Duration(minutes: 5),
+          verificationCompleted: (PhoneAuthCredential phoneAuthCredential) async {
+            await FirebaseAuth.instance
+                .signInWithCredential(phoneAuthCredential);
+          },
+          verificationFailed: (FirebaseAuthException error) {
+            _verificationIdController.add(error.code);
+          },
+          codeAutoRetrievalTimeout: (String verificationId) {});
+    } on FirebaseAuthException catch (e) {
+      throw Exception(e);
     }
   }
 }

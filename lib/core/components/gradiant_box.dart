@@ -1,10 +1,11 @@
 import 'package:flutter/material.dart';
 
 class GradiantBox extends StatelessWidget {
-  const GradiantBox({Key key, @required this.a, @required this.b})
+  const GradiantBox({Key key, @required this.a, @required this.b, this.child})
       : super(key: key);
   final Color a;
   final Color b;
+  final Widget child;
 
   @override
   Widget build(BuildContext context) {
@@ -17,6 +18,7 @@ class GradiantBox extends StatelessWidget {
             a,
             b,
           ])),
+      child: child,
     );
   }
 }

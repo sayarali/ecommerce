@@ -24,5 +24,8 @@ class AppThemeLight extends AppTheme {
         onSurface: Colors.black,
       ),
       snackBarTheme: const SnackBarThemeData(backgroundColor: Colors.black87),
+      bottomAppBarTheme: const BottomAppBarTheme(
+          color: Colors.white, surfaceTintColor: Colors.orange),
+      unselectedWidgetColor: Colors.white10
   );
 }

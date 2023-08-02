@@ -91,16 +91,29 @@ class _LoginViewState extends BaseState<LoginView> {
                   ),
                   buildLoginButtonContainer(),
                   buildRegisterRow(),
+
                   Container(
                       alignment: Alignment.center,
                       margin: const EdgeInsets.symmetric(vertical: 15),
                       child: const Text(
-                        "Sosyal medya ile devam et",
+                        "ya da",
                         style: TextStyle(color: Colors.white70),
                       )),
                   Row(
                     mainAxisAlignment: MainAxisAlignment.center,
                     children: [
+                      Container(
+                        margin: const EdgeInsets.all(4),
+                        decoration: BoxDecoration(
+                            color: themeData.primaryColor,
+                            borderRadius: BorderRadius.circular(50)),
+                        child: IconButton(
+                          onPressed: () {
+                            viewModel.goToPhoneAuthView();
+                          },
+                          icon: Icon(Icons.phone)
+                        ),
+                      ),
                       Container(
                         margin: EdgeInsets.all(4),
                         decoration: BoxDecoration(
@@ -118,7 +131,7 @@ class _LoginViewState extends BaseState<LoginView> {
                       Container(
                           margin: EdgeInsets.all(4),
                           decoration: BoxDecoration(
-                              color: Colors.orange,
+                              color: themeData.primaryColor,
                               borderRadius: BorderRadius.circular(50)),
                           child: IconButton(
                             onPressed: () {
@@ -228,7 +241,7 @@ class _LoginViewState extends BaseState<LoginView> {
   CustomTextField buildEmailCustomTextField() {
     return CustomTextField(
       controller: viewModel.emailController,
-      hintText: "E-posta ya da telefon",
+      hintText: "E-posta",
       prefixIcon: Icon(Icons.email_outlined),
       errorText: "E-posta adresinizi giriniz.",
       error: viewModel.emailError,
