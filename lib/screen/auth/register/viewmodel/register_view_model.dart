@@ -49,32 +49,40 @@ abstract class RegisterViewModelBase with Store, BaseViewModel {
         lastNameController.text != "") {
       showProgress();
       try {
-        User user = await FirebaseService().signUp(emailController.text, passwordCheckController.text);
+        User user = await FirebaseService()
+            .signUp(emailController.text, passwordCheckController.text);
         UserModel userModel = UserModel(
-          userId: user.uid,
-          name: nameController.text,
-          lastName: lastNameController.text,
-          email: emailController.text,
-          phoneNumber: "",
-          address: ""
-        );
+            userId: user.uid,
+            name: nameController.text,
+            lastName: lastNameController.text,
+            email: emailController.text,
+            phoneNumber: "",
+            address: "");
+        await user.updateDisplayName(
+            "${nameController.text} ${lastNameController.text}");
+        await user.updatePhotoURL("asdfg");
         await FirebaseService().addUser(userModel);
-        String sendEmailMessage = await FirebaseService().sendVerificationEmail();
-        ScaffoldMessenger.of(viewModelContext).showSnackBar(SnackBar(content: Text(sendEmailMessage)));
-      } catch(e){
+        String sendEmailMessage =
+            await FirebaseService().sendVerificationEmail();
+        ScaffoldMessenger.of(viewModelContext)
+            .showSnackBar(SnackBar(content: Text(sendEmailMessage)));
+      } catch (e) {
         print(e);
-        ScaffoldMessenger.of(viewModelContext).showSnackBar(SnackBar(content: Text(e.toString())));
+        ScaffoldMessenger.of(viewModelContext)
+            .showSnackBar(SnackBar(content: Text(e.toString())));
         closeProgress();
       }
     } else {
-      if(emailController.text == "") emailError = true;
-      if(nameController.text == "") nameError = true;
-      if(lastNameController.text == "") lastNameError = true;
-      if(passwordController.text.length < 6) passwordError = true;
-      if(passwordCheckController.text != passwordController.text) passwordCheckError = true;
+      if (emailController.text == "") emailError = true;
+      if (nameController.text == "") nameError = true;
+      if (lastNameController.text == "") lastNameError = true;
+      if (passwordController.text.length < 6) passwordError = true;
+      if (passwordCheckController.text != passwordController.text)
+        passwordCheckError = true;
     }
   }
 
   showProgress() => AppProgress.showProgress(viewModelContext);
+
   closeProgress() => AppProgress.closeProgress(viewModelContext);
 }

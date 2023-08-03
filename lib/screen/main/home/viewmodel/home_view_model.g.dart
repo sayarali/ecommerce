@@ -30,33 +30,14 @@ mixin _$HomeViewModel on HomeViewModelBase, Store {
     name: 'HomeViewModelBase.profilePhotoUrl',
   );
 
-  @override
-  String get profilePhotoUrl {
-    _$profilePhotoUrlAtom.reportRead();
-    return super.profilePhotoUrl;
-  }
-
-  @override
-  set profilePhotoUrl(String value) {
-    _$profilePhotoUrlAtom.reportWrite(value, super.profilePhotoUrl, () {
-      super.profilePhotoUrl = value;
-    });
-  }
-
   final _$getUserAsyncAction = AsyncAction(
     'HomeViewModelBase.getUser',
   );
 
   @override
-  Future getUser() {
-    return _$getUserAsyncAction.run(() => super.getUser());
-  }
-
-  @override
   String toString() {
     return '''
 displayName: ${displayName},
-profilePhotoUrl: ${profilePhotoUrl}
     ''';
   }
 }

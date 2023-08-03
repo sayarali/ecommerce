@@ -13,8 +13,6 @@ abstract class HomeViewModelBase with Store, BaseViewModel {
   FirebaseService firebaseService = FirebaseService();
   @observable
   String displayName;
-  @observable
-  String profilePhotoUrl;
   @override
   void setContext(BuildContext context) {
     viewModelContext = context;
@@ -30,11 +28,9 @@ abstract class HomeViewModelBase with Store, BaseViewModel {
     await firebaseService.signOut();
   }
 
-  @action
   Future getUser() async {
-    final user = await FirebaseService().getCurrentUser();
+    final user = await firebaseService.getCurrentUser();
     displayName = user.displayName;
-    profilePhotoUrl = user.photoURL;
   }
 
   showProgress() => AppProgress.showProgress(viewModelContext);

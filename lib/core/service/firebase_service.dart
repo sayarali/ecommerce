@@ -162,11 +162,13 @@ class FirebaseService {
     }
   }
 
-  final StreamController<String> _verificationIdController = StreamController<String>();
+  final StreamController<String> _verificationIdController =
+      StreamController<String>();
   Stream<String> get verificationIdStream => _verificationIdController.stream;
   void dispose() {
     _verificationIdController.close();
   }
+
   Future<void> sendCodeToPhoneNumber(String phoneNumber) async {
     try {
       await _auth.verifyPhoneNumber(
@@ -175,7 +177,8 @@ class FirebaseService {
             _verificationIdController.add(verificationId);
           },
           timeout: const Duration(minutes: 5),
-          verificationCompleted: (PhoneAuthCredential phoneAuthCredential) async {
+          verificationCompleted:
+              (PhoneAuthCredential phoneAuthCredential) async {
             await FirebaseAuth.instance
                 .signInWithCredential(phoneAuthCredential);
           },

@@ -1,5 +1,6 @@
 import 'package:ecommerce/core/base/state/base_state.dart';
 import 'package:ecommerce/core/base/view/base_view.dart';
+import 'package:ecommerce/screen/main/account/account_view.dart';
 import 'package:ecommerce/screen/main/home/viewmodel/home_view_model.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_mobx/flutter_mobx.dart';
@@ -47,43 +48,37 @@ class _HomeViewState extends BaseState<HomeView> with TickerProviderStateMixin {
             Container(
               color: Colors.orange,
             ),
-            Container(
-              color: Colors.green,
-            ),
+            const AccountView()
           ],
         ),
         bottomNavigationBar: BottomAppBar(
-          shape: CircularNotchedRectangle(), //shape of notch
+          shape: const CircularNotchedRectangle(), //shape of notch
           notchMargin: 8,
           child: TabBar(
             controller: tabController,
             labelColor: themeData.bottomAppBarTheme.surfaceTintColor,
             unselectedLabelColor: themeData.disabledColor,
             indicator: const BoxDecoration(),
-            tabs: <Widget>[
-              const Tab(
+            tabs: const <Widget>[
+              Tab(
                 text: "Anasayfa",
                 icon: Icon(Icons.home_rounded),
                 iconMargin: EdgeInsets.only(bottom: 2),
               ),
-              const Tab(
+              Tab(
                 text: "Kategoriler",
                 icon: Icon(Icons.category),
                 iconMargin: EdgeInsets.only(bottom: 2),
               ),
-              const Tab(
+              Tab(
                 text: "Favoriler",
                 icon: Icon(Icons.favorite),
                 iconMargin: EdgeInsets.only(bottom: 2),
               ),
               Tab(
                 text: "Hesabım",
-                icon: Observer(
-                    builder: (_) => Image.network(
-                          viewModel.profilePhotoUrl,
-                          height: 24,
-                        )),
-                iconMargin: const EdgeInsets.only(bottom: 2),
+                icon: Icon(Icons.account_circle),
+                iconMargin: EdgeInsets.only(bottom: 2),
               ),
             ],
           ),
@@ -104,7 +99,7 @@ class _HomeViewState extends BaseState<HomeView> with TickerProviderStateMixin {
           Observer(builder: (_) {
             return Column(
               children: [
-                Text(viewModel.displayName),
+                Text(viewModel.displayName ?? "İsim yok"),
               ],
             );
           }),
