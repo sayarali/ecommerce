@@ -9,8 +9,9 @@ part of 'register_view_model.dart';
 // ignore_for_file: non_constant_identifier_names, unnecessary_brace_in_string_interps, unnecessary_lambdas, prefer_expression_function_bodies, lines_longer_than_80_chars, avoid_as, avoid_annotating_with_dynamic, no_leading_underscores_for_local_identifiers
 
 mixin _$RegisterViewModel on RegisterViewModelBase, Store {
-  final _$emailErrorAtom =
-      Atom(name: 'RegisterViewModelBase.emailError',);
+  final _$emailErrorAtom = Atom(
+    name: 'RegisterViewModelBase.emailError',
+  );
 
   @override
   bool get emailError {
@@ -25,8 +26,9 @@ mixin _$RegisterViewModel on RegisterViewModelBase, Store {
     });
   }
 
-  final _$nameErrorAtom =
-      Atom(name: 'RegisterViewModelBase.nameError',);
+  final _$nameErrorAtom = Atom(
+    name: 'RegisterViewModelBase.nameError',
+  );
 
   @override
   bool get nameError {
@@ -41,8 +43,9 @@ mixin _$RegisterViewModel on RegisterViewModelBase, Store {
     });
   }
 
-  final _$lastNameErrorAtom =
-      Atom(name: 'RegisterViewModelBase.lastNameError',);
+  final _$lastNameErrorAtom = Atom(
+    name: 'RegisterViewModelBase.lastNameError',
+  );
 
   @override
   bool get lastNameError {
@@ -57,8 +60,9 @@ mixin _$RegisterViewModel on RegisterViewModelBase, Store {
     });
   }
 
-  final _$passwordErrorAtom =
-      Atom(name: 'RegisterViewModelBase.passwordError',);
+  final _$passwordErrorAtom = Atom(
+    name: 'RegisterViewModelBase.passwordError',
+  );
 
   @override
   bool get passwordError {
@@ -73,8 +77,9 @@ mixin _$RegisterViewModel on RegisterViewModelBase, Store {
     });
   }
 
-  final _$passwordCheckErrorAtom =
-      Atom(name: 'RegisterViewModelBase.passwordCheckError',);
+  final _$passwordCheckErrorAtom = Atom(
+    name: 'RegisterViewModelBase.passwordCheckError',
+  );
 
   @override
   bool get passwordCheckError {
@@ -89,8 +94,9 @@ mixin _$RegisterViewModel on RegisterViewModelBase, Store {
     });
   }
 
-  final _$passwordVisibilityAtom =
-      Atom(name: 'RegisterViewModelBase.passwordVisibility',);
+  final _$passwordVisibilityAtom = Atom(
+    name: 'RegisterViewModelBase.passwordVisibility',
+  );
 
   @override
   bool get passwordVisibility {
@@ -106,7 +112,8 @@ mixin _$RegisterViewModel on RegisterViewModelBase, Store {
   }
 
   final _$passwordCheckVisibilityAtom = Atom(
-      name: 'RegisterViewModelBase.passwordCheckVisibility',);
+    name: 'RegisterViewModelBase.passwordCheckVisibility',
+  );
 
   @override
   bool get passwordCheckVisibility {

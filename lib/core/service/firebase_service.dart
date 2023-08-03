@@ -164,7 +164,9 @@ class FirebaseService {
 
   final StreamController<String> _verificationIdController = StreamController<String>();
   Stream<String> get verificationIdStream => _verificationIdController.stream;
-
+  void dispose() {
+    _verificationIdController.close();
+  }
   Future<void> sendCodeToPhoneNumber(String phoneNumber) async {
     try {
       await _auth.verifyPhoneNumber(

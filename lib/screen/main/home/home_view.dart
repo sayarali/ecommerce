@@ -1,7 +1,5 @@
 import 'package:ecommerce/core/base/state/base_state.dart';
 import 'package:ecommerce/core/base/view/base_view.dart';
-import 'package:ecommerce/core/components/gradiant_box.dart';
-import 'package:ecommerce/screen/auth/login/login_view.dart';
 import 'package:ecommerce/screen/main/home/viewmodel/home_view_model.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_mobx/flutter_mobx.dart';
@@ -14,15 +12,15 @@ class HomeView extends StatefulWidget {
 }
 
 class _HomeViewState extends BaseState<HomeView> with TickerProviderStateMixin {
-
   TabController tabController;
   HomeViewModel viewModel;
 
   @override
   void initState() {
     super.initState();
-    tabController = TabController(length: 3, vsync: this);
+    tabController = TabController(length: 4, vsync: this);
   }
+
   @override
   Widget build(BuildContext context) {
     return BaseView<HomeViewModel>(
@@ -37,31 +35,64 @@ class _HomeViewState extends BaseState<HomeView> with TickerProviderStateMixin {
   }
 
   Scaffold get buildScaffold => Scaffold(
+        extendBody: true,
         body: TabBarView(
-          physics: NeverScrollableScrollPhysics(),
+          controller: tabController,
+          physics: const NeverScrollableScrollPhysics(),
           children: [
             buildCenter(),
-            Container(color: Colors.redAccent,),
-            Container(color: Colors.orange,),
-            Container(color: Colors.green,),
+            Container(
+              color: Colors.redAccent,
+            ),
+            Container(
+              color: Colors.orange,
+            ),
+            Container(
+              color: Colors.green,
+            ),
           ],
         ),
         bottomNavigationBar: BottomAppBar(
+          shape: CircularNotchedRectangle(), //shape of notch
+          notchMargin: 8,
           child: TabBar(
+            controller: tabController,
             labelColor: themeData.bottomAppBarTheme.surfaceTintColor,
-            unselectedLabelColor: themeData.unselectedWidgetColor,
+            unselectedLabelColor: themeData.disabledColor,
             indicator: const BoxDecoration(),
-            tabs: const <Widget>[
-             Tab(text: "Anasayfa", icon: Icon(Icons.home_rounded), iconMargin: EdgeInsets.only(bottom: 2),),
-             Tab(text: "Kategoriler", icon: Icon(Icons.category), iconMargin: EdgeInsets.only(bottom: 2),),
-             Tab(text: "Favoriler", icon: Icon(Icons.favorite), iconMargin: EdgeInsets.only(bottom: 2),),
-             Tab(text: "Hesabım", icon: Icon(Icons.account_circle_rounded), iconMargin: EdgeInsets.only(bottom: 2),),
-
+            tabs: <Widget>[
+              const Tab(
+                text: "Anasayfa",
+                icon: Icon(Icons.home_rounded),
+                iconMargin: EdgeInsets.only(bottom: 2),
+              ),
+              const Tab(
+                text: "Kategoriler",
+                icon: Icon(Icons.category),
+                iconMargin: EdgeInsets.only(bottom: 2),
+              ),
+              const Tab(
+                text: "Favoriler",
+                icon: Icon(Icons.favorite),
+                iconMargin: EdgeInsets.only(bottom: 2),
+              ),
+              Tab(
+                text: "Hesabım",
+                icon: Observer(
+                    builder: (_) => Image.network(
+                          viewModel.profilePhotoUrl,
+                          height: 24,
+                        )),
+                iconMargin: const EdgeInsets.only(bottom: 2),
+              ),
             ],
           ),
-
-
         ),
+        floatingActionButton: FloatingActionButton(
+          onPressed: () {},
+          child: const Icon(Icons.shopping_cart),
+        ),
+        floatingActionButtonLocation: FloatingActionButtonLocation.centerDocked,
       );
 
   Center buildCenter() {
@@ -71,13 +102,17 @@ class _HomeViewState extends BaseState<HomeView> with TickerProviderStateMixin {
         crossAxisAlignment: CrossAxisAlignment.center,
         children: [
           Observer(builder: (_) {
-            return Text("viewModel.user.email");
+            return Column(
+              children: [
+                Text(viewModel.displayName),
+              ],
+            );
           }),
           ElevatedButton(
               onPressed: () {
                 viewModel.signOut();
               },
-              child: Text("Çıkış Yap"))
+              child: const Text("Çıkış Yap"))
         ],
       ),
     );

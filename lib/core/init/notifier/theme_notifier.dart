@@ -1,6 +1,5 @@
 
 import 'package:ecommerce/core/constants/enums/app_theme_enum.dart';
-import 'package:ecommerce/core/init/theme/app_theme_dark.dart';
 import 'package:ecommerce/core/init/theme/app_theme_light.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';

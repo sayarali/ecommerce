@@ -43,8 +43,8 @@ class _PhoneAuthViewState extends BaseState<PhoneAuthView> {
         ),
         body: GestureDetector(
           onTap: (() => FocusScope.of(context).unfocus()),
-          child: Padding(
-            padding: const EdgeInsets.all(12.0),
+          child: SingleChildScrollView(
+            padding: EdgeInsets.all(12),
             child: Column(
               children: <Widget>[
                 Image(

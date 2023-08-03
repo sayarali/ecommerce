@@ -91,6 +91,7 @@ abstract class PhoneAuthViewModelBase with Store, BaseViewModel {
         );
         await FirebaseAuth.instance.signInWithCredential(phoneAuthCredential);
         await firebaseService.addUser(userModel);
+        firebaseService.dispose();
       }
     } catch(e) {
       buildSnackBar(e.toString());
