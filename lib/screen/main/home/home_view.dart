@@ -3,7 +3,6 @@ import 'package:ecommerce/core/base/view/base_view.dart';
 import 'package:ecommerce/screen/main/account/account_view.dart';
 import 'package:ecommerce/screen/main/home/viewmodel/home_view_model.dart';
 import 'package:flutter/material.dart';
-import 'package:flutter_mobx/flutter_mobx.dart';
 
 class HomeView extends StatefulWidget {
   const HomeView({Key key}) : super(key: key);
@@ -19,14 +18,14 @@ class _HomeViewState extends BaseState<HomeView> with TickerProviderStateMixin {
   @override
   void initState() {
     super.initState();
-    tabController = TabController(length: 4, vsync: this);
+    tabController = TabController(length: 5, vsync: this);
   }
 
   @override
   Widget build(BuildContext context) {
     return BaseView<HomeViewModel>(
         onPageBuilder: (context, value) =>
-            DefaultTabController(length: 4, child: buildScaffold),
+            DefaultTabController(length: 5, child: buildScaffold),
         viewModel: HomeViewModel(),
         onModelReady: (model) {
           model.setContext(context);
@@ -37,18 +36,25 @@ class _HomeViewState extends BaseState<HomeView> with TickerProviderStateMixin {
 
   Scaffold get buildScaffold => Scaffold(
         extendBody: true,
-        body: TabBarView(
-          controller: tabController,
-          physics: const NeverScrollableScrollPhysics(),
+        body: Stack(
           children: [
-            buildCenter(),
-            Container(
-              color: Colors.redAccent,
+            TabBarView(
+              controller: tabController,
+              physics: const NeverScrollableScrollPhysics(),
+              children: [
+                Container(
+                  color: Colors.blueAccent,
+                ),
+                Container(
+                  color: Colors.redAccent,
+                ),
+                SizedBox(),
+                Container(
+                  color: Colors.orange,
+                ),
+                const AccountView()
+              ],
             ),
-            Container(
-              color: Colors.orange,
-            ),
-            const AccountView()
           ],
         ),
         bottomNavigationBar: BottomAppBar(
@@ -70,6 +76,7 @@ class _HomeViewState extends BaseState<HomeView> with TickerProviderStateMixin {
                 icon: Icon(Icons.category),
                 iconMargin: EdgeInsets.only(bottom: 2),
               ),
+              SizedBox(),
               Tab(
                 text: "Favoriler",
                 icon: Icon(Icons.favorite),
@@ -89,27 +96,4 @@ class _HomeViewState extends BaseState<HomeView> with TickerProviderStateMixin {
         ),
         floatingActionButtonLocation: FloatingActionButtonLocation.centerDocked,
       );
-
-  Center buildCenter() {
-    return Center(
-      child: Column(
-        mainAxisAlignment: MainAxisAlignment.center,
-        crossAxisAlignment: CrossAxisAlignment.center,
-        children: [
-          Observer(builder: (_) {
-            return Column(
-              children: [
-                Text(viewModel.displayName ?? "İsim yok"),
-              ],
-            );
-          }),
-          ElevatedButton(
-              onPressed: () {
-                viewModel.signOut();
-              },
-              child: const Text("Çıkış Yap"))
-        ],
-      ),
-    );
-  }
 }

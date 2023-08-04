@@ -5,6 +5,7 @@ import 'package:ecommerce/core/service/firebase_service.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 import 'package:mobx/mobx.dart';
+
 import '../../../../core/components/app_progress.dart';
 
 part 'phone_auth_view_model.g.dart';
@@ -63,6 +64,7 @@ abstract class PhoneAuthViewModelBase with Store, BaseViewModel {
             onCodeSubmitted: (String code) {
               checkCodeAndSignIn(verificationId, code);
               Navigator.pop(context);
+              showProgress();
             },
           ),
           actions: [
@@ -84,19 +86,24 @@ abstract class PhoneAuthViewModelBase with Store, BaseViewModel {
         verificationId: verificationId,
         smsCode: code,
       );
+      UserCredential user =
+          await FirebaseAuth.instance.signInWithCredential(phoneAuthCredential);
       if (phoneAuthCredential != null) {
         UserModel userModel = UserModel(
-          userId: phoneAuthCredential.providerId,
-          phoneNumber: phoneController.text,
+          userId: user.user.uid,
+          email: "",
+          name: "",
+          lastName: "",
+          address: "",
+          phoneNumber: user.user.phoneNumber,
         );
-        await FirebaseAuth.instance.signInWithCredential(phoneAuthCredential);
+
         await firebaseService.addUser(userModel);
         firebaseService.dispose();
       }
-    } catch(e) {
+    } catch (e) {
       buildSnackBar(e.toString());
     }
-
   }
 
   showProgress() => AppProgress.showProgress(viewModelContext);

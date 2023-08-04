@@ -11,6 +11,17 @@ class FirebaseService {
   final FirebaseAuth _auth = FirebaseAuth.instance;
   final CollectionReference usersCollection =
       FirebaseFirestore.instance.collection('users');
+  final StreamController<User> _authStateController =
+      StreamController<User>.broadcast();
+  FirebaseService() {
+    _auth.authStateChanges().listen((User newUser) {
+      _authStateController.add(newUser);
+    });
+  }
+  // Kullanıcı oturum açmış mı kontrolü
+  Stream<User> authStateChanges() {
+    return _authStateController.stream;
+  }
 
   //Giriş
   Future<User> signIn(String email, String password) async {
@@ -74,9 +85,6 @@ class FirebaseService {
     await FacebookAuth.instance.logOut();
   }
 
-  // Kullanıcı oturum açmış mı kontrolü
-  Stream<User> get authStateChanges => _auth.authStateChanges();
-
   //Kullanıcıyı FireStore'a kaydetme
   Future<void> addUser(UserModel user) async {
     try {
@@ -120,6 +128,7 @@ class FirebaseService {
 
   Future<User> getCurrentUser() async {
     try {
+      _auth.currentUser.reload();
       User user = _auth.currentUser;
       if (user != null) {
         return user;
@@ -188,6 +197,47 @@ class FirebaseService {
           codeAutoRetrievalTimeout: (String verificationId) {});
     } on FirebaseAuthException catch (e) {
       throw Exception(e);
+    }
+  }
+
+  Future<void> updateEmail(String newEmail) async {
+    try {
+      User user = _auth.currentUser;
+      if (user != null) {
+        await user.updateEmail(newEmail);
+        _auth.currentUser.reload();
+        await usersCollection.doc(user.uid).update({"email": newEmail});
+      }
+    } on FirebaseAuthException catch (e) {
+      if (e.code == "invalid-email") {
+        throw "Geçersiz e-posta adresi.";
+      }
+      print('E-posta güncellenirken hata oluştu: $e');
+    }
+  }
+
+  Future<void> updateName(String displayName) async {
+    try {
+      User user = _auth.currentUser;
+      List<String> nameList = displayName.split(" ");
+      print(nameList);
+      if (user != null) {
+        await user.updateDisplayName(displayName);
+        String name = "";
+        String lastName = "";
+        for (int i = 0; i < nameList.length; i++) {
+          if (i < nameList.length - 1) {
+            name += " ${nameList[i]}";
+          } else {
+            lastName = nameList[i];
+          }
+        }
+        await usersCollection
+            .doc(user.uid)
+            .update({"name": name, "lastName": lastName});
+      }
+    } on FirebaseAuthException catch (e) {
+      throw ('Kullanıcı adı güncellenirken bir hata oluştu: $e');
     }
   }
 }

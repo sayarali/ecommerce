@@ -60,7 +60,7 @@ abstract class RegisterViewModelBase with Store, BaseViewModel {
             address: "");
         await user.updateDisplayName(
             "${nameController.text} ${lastNameController.text}");
-        await user.updatePhotoURL("asdfg");
+        await user.updatePhotoURL("");
         await FirebaseService().addUser(userModel);
         String sendEmailMessage =
             await FirebaseService().sendVerificationEmail();

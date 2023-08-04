@@ -9,6 +9,7 @@ part 'splash_view_model.g.dart';
 class SplashViewModel = SplashViewModelBase with _$SplashViewModel;
 
 abstract class SplashViewModelBase with Store, BaseViewModel {
+  FirebaseService firebaseService = FirebaseService();
   User user;
   @override
   void setContext(BuildContext context) {
@@ -17,21 +18,22 @@ abstract class SplashViewModelBase with Store, BaseViewModel {
 
   @override
   void init() {
-    FirebaseService().authStateChanges.listen((user) {
-      if(user != null){
-        Future.delayed(const Duration(seconds: 2)).whenComplete(() => goToHome());
+    firebaseService.authStateChanges().listen((user) {
+      if (user != null) {
+        Future.delayed(const Duration(seconds: 2))
+            .whenComplete(() => goToHome());
       } else {
-        Future.delayed(const Duration(seconds: 2)).whenComplete(() => goToLogin());
+        Future.delayed(const Duration(seconds: 2))
+            .whenComplete(() => goToLogin());
       }
     });
-
-
   }
 
-  void goToLogin(){
+  void goToLogin() {
     navigation.navigateToPageRemoveUntil("/login_view", null);
   }
-  void goToHome(){
+
+  void goToHome() {
     navigation.navigateToPageRemoveUntil("/home_view", null);
   }
 }

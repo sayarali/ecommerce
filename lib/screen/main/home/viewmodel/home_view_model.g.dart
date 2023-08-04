@@ -26,14 +26,6 @@ mixin _$HomeViewModel on HomeViewModelBase, Store {
     });
   }
 
-  final _$profilePhotoUrlAtom = Atom(
-    name: 'HomeViewModelBase.profilePhotoUrl',
-  );
-
-  final _$getUserAsyncAction = AsyncAction(
-    'HomeViewModelBase.getUser',
-  );
-
   @override
   String toString() {
     return '''
