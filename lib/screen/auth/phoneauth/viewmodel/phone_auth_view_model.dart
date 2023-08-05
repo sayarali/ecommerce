@@ -1,7 +1,7 @@
 import 'package:ecommerce/core/base/model/base_view_model.dart';
 import 'package:ecommerce/core/components/verification_code_input.dart';
 import 'package:ecommerce/core/model/user_model.dart';
-import 'package:ecommerce/core/service/firebase_service.dart';
+import 'package:ecommerce/core/service/firebase_auth_service.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 import 'package:mobx/mobx.dart';
@@ -13,7 +13,7 @@ part 'phone_auth_view_model.g.dart';
 class PhoneAuthViewModel = PhoneAuthViewModelBase with _$PhoneAuthViewModel;
 
 abstract class PhoneAuthViewModelBase with Store, BaseViewModel {
-  FirebaseService firebaseService = FirebaseService();
+  FirebaseAuthService firebaseService = FirebaseAuthService();
   final TextEditingController phoneController = TextEditingController();
   final TextEditingController verificationCodeController =
       TextEditingController();

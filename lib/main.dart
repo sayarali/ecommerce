@@ -3,9 +3,10 @@ import 'package:ecommerce/core/init/navigation/navigation_service.dart';
 import 'package:ecommerce/core/init/notifier/application_provider.dart';
 import 'package:ecommerce/core/init/notifier/theme_notifier.dart';
 import 'package:ecommerce/screen/auth/splash/splash_view.dart';
+import 'package:firebase_core/firebase_core.dart';
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
-import 'package:firebase_core/firebase_core.dart';
+
 import 'firebase_options.dart';
 
 void main() async {
@@ -15,7 +16,7 @@ void main() async {
   );
   runApp(MultiProvider(
       providers: [...ApplicationProvider.instance.singleItems],
-      child: MyApp()));
+      child: const MyApp()));
 }
 
 class MyApp extends StatelessWidget {

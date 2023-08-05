@@ -52,7 +52,7 @@ class Assets {
   static const String registerRegisterView =
       'lib/screen/auth/register/register_view.dart';
   static const String serviceFirebaseService =
-      'lib/core/service/firebase_service.dart';
+      'lib/core/service/firebase_auth_service.dart';
   static const String splashSplashView =
       'lib/screen/auth/splash/splash_view.dart';
   static const String stateBaseState = 'lib/core/base/state/base_state.dart';

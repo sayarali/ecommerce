@@ -1,7 +1,7 @@
 import 'package:ecommerce/core/base/model/base_view_model.dart';
-import 'package:ecommerce/core/service/firebase_service.dart';
-import 'package:mobx/mobx.dart';
+import 'package:ecommerce/core/service/firebase_auth_service.dart';
 import 'package:flutter/material.dart';
+import 'package:mobx/mobx.dart';
 
 import '../../../../core/components/app_progress.dart';
 
@@ -25,7 +25,8 @@ abstract class ForgotPasswordViewModelBase with Store, BaseViewModel {
     if (emailController.text != "") {
       showProgress();
       try {
-        await FirebaseService().sendPasswordResetEmail(emailController.text);
+        await FirebaseAuthService()
+            .sendPasswordResetEmail(emailController.text);
         ScaffoldMessenger.of(viewModelContext).showSnackBar(
             SnackBar(content: Text("Parola sıfırlama bağlantısı gönderildi.")));
       } catch (e) {
@@ -35,6 +36,7 @@ abstract class ForgotPasswordViewModelBase with Store, BaseViewModel {
       closeProgress();
     }
   }
+
   showProgress() => AppProgress.showProgress(viewModelContext);
   closeProgress() => AppProgress.closeProgress(viewModelContext);
 }

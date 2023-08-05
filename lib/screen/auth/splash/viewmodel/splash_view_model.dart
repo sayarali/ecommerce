@@ -1,5 +1,5 @@
 import 'package:ecommerce/core/base/model/base_view_model.dart';
-import 'package:ecommerce/core/service/firebase_service.dart';
+import 'package:ecommerce/core/service/firebase_auth_service.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:mobx/mobx.dart';
@@ -9,7 +9,7 @@ part 'splash_view_model.g.dart';
 class SplashViewModel = SplashViewModelBase with _$SplashViewModel;
 
 abstract class SplashViewModelBase with Store, BaseViewModel {
-  FirebaseService firebaseService = FirebaseService();
+  FirebaseAuthService firebaseService = FirebaseAuthService();
   User user;
   @override
   void setContext(BuildContext context) {

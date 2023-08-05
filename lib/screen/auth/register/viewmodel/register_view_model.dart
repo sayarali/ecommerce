@@ -1,6 +1,6 @@
 import 'package:ecommerce/core/base/model/base_view_model.dart';
 import 'package:ecommerce/core/model/user_model.dart';
-import 'package:ecommerce/core/service/firebase_service.dart';
+import 'package:ecommerce/core/service/firebase_auth_service.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 import 'package:mobx/mobx.dart';
@@ -49,25 +49,26 @@ abstract class RegisterViewModelBase with Store, BaseViewModel {
         lastNameController.text != "") {
       showProgress();
       try {
-        User user = await FirebaseService()
+        User user = await FirebaseAuthService()
             .signUp(emailController.text, passwordCheckController.text);
         UserModel userModel = UserModel(
-            userId: user.uid,
-            name: nameController.text,
-            lastName: lastNameController.text,
-            email: emailController.text,
-            phoneNumber: "",
-            address: "");
+          userId: user.uid,
+          name: nameController.text,
+          lastName: lastNameController.text,
+          email: emailController.text,
+          phoneNumber: "",
+          address: "",
+          photoUrl: "",
+        );
         await user.updateDisplayName(
             "${nameController.text} ${lastNameController.text}");
         await user.updatePhotoURL("");
-        await FirebaseService().addUser(userModel);
+        await FirebaseAuthService().addUser(userModel);
         String sendEmailMessage =
-            await FirebaseService().sendVerificationEmail();
+            await FirebaseAuthService().sendVerificationEmail();
         ScaffoldMessenger.of(viewModelContext)
             .showSnackBar(SnackBar(content: Text(sendEmailMessage)));
       } catch (e) {
-        print(e);
         ScaffoldMessenger.of(viewModelContext)
             .showSnackBar(SnackBar(content: Text(e.toString())));
         closeProgress();

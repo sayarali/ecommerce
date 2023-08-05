@@ -1,7 +1,7 @@
 import 'package:ecommerce/core/base/model/base_view_model.dart';
 import 'package:ecommerce/core/components/app_progress.dart';
-import 'package:ecommerce/core/service/firebase_service.dart';
-import 'package:firebase_auth/firebase_auth.dart';
+import 'package:ecommerce/core/model/user_model.dart';
+import 'package:ecommerce/core/service/firebase_auth_service.dart';
 import 'package:flutter/material.dart';
 import 'package:mobx/mobx.dart';
 
@@ -10,13 +10,18 @@ part 'account_view_model.g.dart';
 class AccountViewModel = AccountViewModelBase with _$AccountViewModel;
 
 abstract class AccountViewModelBase with Store, BaseViewModel {
-  FirebaseService firebaseService = FirebaseService();
+  FirebaseAuthService firebaseService = FirebaseAuthService();
 
   TextEditingController phoneController = TextEditingController();
-  TextEditingController emailController = TextEditingController();
   TextEditingController displayNameController = TextEditingController();
+
   @observable
-  User user;
+  UserModel userModel;
+  @observable
+  bool emailVerified = false;
+
+  @observable
+  bool allNotifications = false;
 
   @override
   void setContext(BuildContext context) {
@@ -25,46 +30,53 @@ abstract class AccountViewModelBase with Store, BaseViewModel {
 
   @override
   void init() {
-    firebaseService.authStateChanges().listen((event) {
-      FirebaseAuth.instance.currentUser.reload();
-      user = event;
-    });
-    getUser();
+    fetchUserData();
+    isEmailVerified();
   }
 
   @action
-  Future getUser() async {
-    user = await firebaseService.getCurrentUser();
-    phoneController.text = user.phoneNumber;
-    emailController.text = user.email;
-    displayNameController.text = user.displayName;
-    print(user.uid);
+  Future<void> fetchUserData() async {
+    userModel = await firebaseService.getCurrentUser();
+    displayNameController.text = "${userModel.name}${userModel.lastName}";
+    phoneController.text = userModel.phoneNumber;
+  }
+
+  void isEmailVerified() {
+    firebaseService.authStateChanges().listen((event) {
+      if (event != null) emailVerified = event.emailVerified;
+    });
   }
 
   void logout() async {
-    AppProgress.showProgress(viewModelContext);
+    showProgress();
     await firebaseService.signOut();
   }
 
   void sendVerifyEmail() async {
     await firebaseService.sendVerificationEmail();
-    showSnackBar(Text("Doğrulama e-postası gönderildi."));
+    showSnackBar(const Text("Doğrulama e-postası gönderildi."));
   }
 
-  void updateEmail() async {
-    if (emailController.text != "") {
+  void updateName() async {
+    if (displayNameController.text != "") {
       try {
-        await firebaseService.updateEmail(emailController.text);
+        showProgress();
+        await firebaseService.updateName(displayNameController.text);
+        fetchUserData();
+        closeProgress();
       } catch (e) {
         showSnackBar(Text(e));
       }
     }
   }
 
-  void updateName() async {
-    if (displayNameController.text != "") {
+  void updatePhone() async {
+    if (phoneController.text != "") {
       try {
-        await firebaseService.updateName(displayNameController.text);
+        showProgress();
+        await firebaseService.updatePhone(phoneController.text);
+        fetchUserData();
+        closeProgress();
       } catch (e) {
         showSnackBar(Text(e));
       }
@@ -76,4 +88,7 @@ abstract class AccountViewModelBase with Store, BaseViewModel {
     return ScaffoldMessenger.of(viewModelContext)
         .showSnackBar(SnackBar(content: content));
   }
+
+  showProgress() => AppProgress.showProgress(viewModelContext);
+  closeProgress() => AppProgress.closeProgress(viewModelContext);
 }

@@ -1,7 +1,6 @@
 import 'package:ecommerce/core/base/view/base_view.dart';
 import 'package:ecommerce/core/components/gradiant_box.dart';
 import 'package:ecommerce/core/components/text_field/custom_text_field.dart';
-import 'package:ecommerce/core/service/firebase_service.dart';
 import 'package:ecommerce/screen/auth/login/viewmodel/login_view_model.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_mobx/flutter_mobx.dart';
@@ -91,7 +90,6 @@ class _LoginViewState extends BaseState<LoginView> {
                   ),
                   buildLoginButtonContainer(),
                   buildRegisterRow(),
-
                   Container(
                       alignment: Alignment.center,
                       margin: const EdgeInsets.symmetric(vertical: 15),
@@ -108,11 +106,10 @@ class _LoginViewState extends BaseState<LoginView> {
                             color: themeData.primaryColor,
                             borderRadius: BorderRadius.circular(50)),
                         child: IconButton(
-                          onPressed: () {
-                            viewModel.goToPhoneAuthView();
-                          },
-                          icon: Icon(Icons.phone)
-                        ),
+                            onPressed: () {
+                              viewModel.goToPhoneAuthView();
+                            },
+                            icon: Icon(Icons.phone)),
                       ),
                       Container(
                         margin: EdgeInsets.all(4),
