@@ -26,6 +26,15 @@ mixin _$ProductDetailsViewModel on ProductDetailsViewModelBase, Store {
     });
   }
 
+  final _$getImagesUrlAsyncAction = AsyncAction(
+    'ProductDetailsViewModelBase.getImagesUrl',
+  );
+
+  @override
+  Future<dynamic> getImagesUrl(String productId) {
+    return _$getImagesUrlAsyncAction.run(() => super.getImagesUrl(productId));
+  }
+
   @override
   String toString() {
     return '''
