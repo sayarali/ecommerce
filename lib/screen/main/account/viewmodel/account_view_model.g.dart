@@ -64,7 +64,7 @@ mixin _$AccountViewModel on AccountViewModelBase, Store {
   );
 
   @override
-  Future fetchUserData() {
+  Future<void> fetchUserData() {
     return _$fetchUserDataAsyncAction.run(() => super.fetchUserData());
   }
 

@@ -48,6 +48,8 @@ dependencies:
   cloud_firestore: ^4.8.4
   google_sign_in: ^6.1.4
   flutter_facebook_auth: ^3.5.0
+  shared_preferences: ^2.2.0
+  carousel_slider: ^4.2.1
 
 dev_dependencies:
   flutter_test:

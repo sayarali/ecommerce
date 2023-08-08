@@ -2,6 +2,7 @@ import 'package:ecommerce/core/base/state/base_state.dart';
 import 'package:ecommerce/core/base/view/base_view.dart';
 import 'package:ecommerce/screen/main/account/account_view.dart';
 import 'package:ecommerce/screen/main/home/viewmodel/home_view_model.dart';
+import 'package:ecommerce/screen/main/main/main_view.dart';
 import 'package:flutter/material.dart';
 
 class HomeView extends StatefulWidget {
@@ -42,9 +43,7 @@ class _HomeViewState extends BaseState<HomeView> with TickerProviderStateMixin {
               controller: tabController,
               physics: const NeverScrollableScrollPhysics(),
               children: [
-                Container(
-                  color: Colors.blueAccent,
-                ),
+                const MainView(),
                 Container(
                   color: Colors.redAccent,
                 ),
