@@ -2,11 +2,13 @@ import 'package:ecommerce/core/constants/navigation/navigation_constants.dart';
 import 'package:ecommerce/screen/auth/forgotpassword/forgot_password_view.dart';
 import 'package:ecommerce/screen/auth/login/login_view.dart';
 import 'package:ecommerce/screen/auth/phoneauth/phone_auth_view.dart';
-import 'package:ecommerce/screen/auth/phoneauth/viewmodel/phone_auth_view_model.dart';
 import 'package:ecommerce/screen/auth/register/register_view.dart';
 import 'package:ecommerce/screen/auth/splash/splash_view.dart';
 import 'package:ecommerce/screen/main/home/home_view.dart';
+import 'package:ecommerce/screen/main/product/product_details_views.dart';
 import 'package:flutter/material.dart';
+
+import '../../model/product_model.dart';
 
 class NavigationRoute {
   NavigationRoute._init();
@@ -29,6 +31,10 @@ class NavigationRoute {
         return normalNavigate(const PhoneAuthView());
       case NavigationConstants.HOME_VIEW:
         return normalNavigate(const HomeView());
+      case NavigationConstants.PRODUCT_DETAILS_VIEW:
+        return normalNavigate(ProductDetailsView(
+          productModel: args.arguments as ProductModel,
+        ));
       default:
         return MaterialPageRoute(
             builder: (context) => const Scaffold(

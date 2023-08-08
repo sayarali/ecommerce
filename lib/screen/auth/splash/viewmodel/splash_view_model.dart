@@ -1,4 +1,5 @@
 import 'package:ecommerce/core/base/model/base_view_model.dart';
+import 'package:ecommerce/core/constants/navigation/navigation_constants.dart';
 import 'package:ecommerce/core/service/firebase_auth_service.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/cupertino.dart';
@@ -30,10 +31,14 @@ abstract class SplashViewModelBase with Store, BaseViewModel {
   }
 
   void goToLogin() {
-    navigation.navigateToPageRemoveUntil("/login_view", null);
+    navigation.navigateToPageRemoveUntil(
+      path: NavigationConstants.LOGIN_VIEW,
+    );
   }
 
   void goToHome() {
-    navigation.navigateToPageRemoveUntil("/home_view", null);
+    navigation.navigateToPageRemoveUntil(
+      path: NavigationConstants.HOME_VIEW,
+    );
   }
 }

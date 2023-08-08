@@ -163,10 +163,7 @@ class _MainViewState extends BaseState<MainView> {
                           return HorizontalProductCard(
                             productModel: viewModel.newProductsList[itemIndex],
                             themeData: themeData,
-                            onPressed: () {
-                              print(viewModel
-                                  .newProductsList[itemIndex].productName);
-                            },
+                            onPressed: () {},
                           );
                         },
                         options: CarouselOptions(

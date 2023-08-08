@@ -1,6 +1,9 @@
+import 'package:ecommerce/core/constants/navigation/navigation_constants.dart';
 import 'package:ecommerce/core/model/product_model.dart';
 import 'package:ecommerce/core/projectstyles/project_styles.dart';
 import 'package:flutter/material.dart';
+
+import '../../init/navigation/navigation_service.dart';
 
 class HorizontalProductCard extends StatelessWidget {
   const HorizontalProductCard({
@@ -16,7 +19,10 @@ class HorizontalProductCard extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return InkWell(
-      onTap: onPressed,
+      onTap: () {
+        NavigationService.instance.navigateToPage(
+            path: NavigationConstants.PRODUCT_DETAILS_VIEW, data: productModel);
+      },
       child: Container(
         margin: const EdgeInsets.symmetric(vertical: 10, horizontal: 4),
         decoration: ProjectStyles.boxDecoration,

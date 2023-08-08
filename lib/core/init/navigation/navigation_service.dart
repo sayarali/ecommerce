@@ -10,13 +10,13 @@ class NavigationService implements INavigationService {
   final removeAllOldRoutes = (Route<dynamic> route) => false;
 
   @override
-  Future<void> navigateToPage(String path, {Object object}) async {
-    await navigatorKey.currentState.pushNamed(path, arguments: object);
+  Future<void> navigateToPage({String path, Object data}) async {
+    await navigatorKey.currentState.pushNamed(path, arguments: data);
   }
 
   @override
-  Future<void> navigateToPageRemoveUntil(String path, Object object) async {
+  Future<void> navigateToPageRemoveUntil({String path, Object data}) async {
     await navigatorKey.currentState
-        .pushNamedAndRemoveUntil(path, removeAllOldRoutes, arguments: object);
+        .pushNamedAndRemoveUntil(path, removeAllOldRoutes, arguments: data);
   }
 }

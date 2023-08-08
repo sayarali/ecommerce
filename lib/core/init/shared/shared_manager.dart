@@ -3,13 +3,15 @@ import 'package:shared_preferences/shared_preferences.dart';
 import '../../constants/enums/preferences_key_enum.dart';
 
 class SharedManager {
+  static final SharedManager _instance = SharedManager._init();
   SharedPreferences _preferences;
+  static SharedManager get instance => _instance;
+
   SharedManager._init() {
     SharedPreferences.getInstance().then((value) => _preferences = value);
   }
-  static final SharedManager _instance = SharedManager._init();
-  static SharedManager get instance => _instance;
-  static Future preferencesInit() async {
+
+  static preferencesInit() async {
     _instance._preferences ??= await SharedPreferences.getInstance();
   }
 

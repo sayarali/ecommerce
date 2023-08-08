@@ -6,4 +6,5 @@ class NavigationConstants {
   static const FORGOT_PASSWORD_VIEW = "/forgot_password_view";
   static const PHONE_AUTH_VIEW = "/phone_auth_view";
   static const HOME_VIEW = "/home_view";
+  static const PRODUCT_DETAILS_VIEW = "/product_details_view";
 }

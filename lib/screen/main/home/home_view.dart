@@ -1,6 +1,8 @@
 import 'package:ecommerce/core/base/state/base_state.dart';
 import 'package:ecommerce/core/base/view/base_view.dart';
 import 'package:ecommerce/screen/main/account/account_view.dart';
+import 'package:ecommerce/screen/main/categories/categories_view.dart';
+import 'package:ecommerce/screen/main/favorites/favorites_view.dart';
 import 'package:ecommerce/screen/main/home/viewmodel/home_view_model.dart';
 import 'package:ecommerce/screen/main/main/main_view.dart';
 import 'package:flutter/material.dart';
@@ -42,16 +44,12 @@ class _HomeViewState extends BaseState<HomeView> with TickerProviderStateMixin {
             TabBarView(
               controller: tabController,
               physics: const NeverScrollableScrollPhysics(),
-              children: [
-                const MainView(),
-                Container(
-                  color: Colors.redAccent,
-                ),
+              children: const [
+                MainView(),
+                CategoriesView(),
                 SizedBox(),
-                Container(
-                  color: Colors.orange,
-                ),
-                const AccountView()
+                FavoritesView(),
+                AccountView()
               ],
             ),
           ],
@@ -75,7 +73,7 @@ class _HomeViewState extends BaseState<HomeView> with TickerProviderStateMixin {
                 icon: Icon(Icons.category),
                 iconMargin: EdgeInsets.only(bottom: 2),
               ),
-              SizedBox(),
+              SizedBox.shrink(),
               Tab(
                 text: "Favoriler",
                 icon: Icon(Icons.favorite),

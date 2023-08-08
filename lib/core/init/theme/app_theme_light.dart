@@ -30,5 +30,10 @@ class AppThemeLight extends AppTheme {
       chipTheme: const ChipThemeData(
           backgroundColor: Colors.white38,
           selectedColor: Colors.orange,
-          brightness: Brightness.light));
+          brightness: Brightness.light),
+      iconTheme: IconThemeData(color: Colors.black87),
+      iconButtonTheme: IconButtonThemeData(
+          style: ButtonStyle(
+              iconColor: MaterialStateProperty.all(Colors.black87))),
+      buttonTheme: ButtonThemeData(buttonColor: Colors.orange));
 }

@@ -1,5 +1,6 @@
 import 'package:ecommerce/core/base/model/base_view_model.dart';
 import 'package:ecommerce/core/components/app_progress.dart';
+import 'package:ecommerce/core/constants/navigation/navigation_constants.dart';
 import 'package:ecommerce/core/model/user_model.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
@@ -112,12 +113,16 @@ abstract class LoginViewModelBase with Store, BaseViewModel {
   }
 
   void goToPhoneAuthView() {
-    navigation.navigateToPage("/phone_auth_view");
+    navigation.navigateToPage(
+      path: NavigationConstants.PHONE_AUTH_VIEW,
+    );
   }
 
-  void goRegisterView() => navigation.navigateToPage("/register_view");
-  void goForgotPasswordView() =>
-      navigation.navigateToPage("/forgot_password_view");
+  void goRegisterView() =>
+      navigation.navigateToPage(path: NavigationConstants.REGISTER_VIEW);
+  void goForgotPasswordView() => navigation.navigateToPage(
+        path: NavigationConstants.FORGOT_PASSWORD_VIEW,
+      );
   showProgress() => AppProgress.showProgress(viewModelContext);
   closeProgress() => AppProgress.closeProgress(viewModelContext);
 }
