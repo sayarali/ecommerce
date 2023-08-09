@@ -5,9 +5,9 @@ import 'package:ecommerce/screen/auth/phoneauth/phone_auth_view.dart';
 import 'package:ecommerce/screen/auth/register/register_view.dart';
 import 'package:ecommerce/screen/auth/splash/splash_view.dart';
 import 'package:ecommerce/screen/main/home/home_view.dart';
-import 'package:ecommerce/screen/main/product/product_details_views.dart';
 import 'package:flutter/material.dart';
 
+import '../../../screen/main/product_details/product_details_views.dart';
 import '../../model/product_model.dart';
 
 class NavigationRoute {
