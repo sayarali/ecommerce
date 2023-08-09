@@ -25,15 +25,24 @@ class FirebaseService {
     return categoryList;
   }
 
-  Future<List<ProductModel>> getProducts(String categoryId) async {
+  Future<List<ProductModel>> getProducts(
+      String categoryId, String brandId) async {
     try {
-      DocumentReference selectedCategoryDocRef = _categories.doc(categoryId);
       QuerySnapshot querySnapshot;
-      if (categoryId == "all") {
-        querySnapshot = await _products.get();
+      if (brandId == "no") {
+        if (categoryId == "all") {
+          querySnapshot = await _products.get();
+        } else {
+          DocumentReference selectedCategoryDocRef =
+              _categories.doc(categoryId);
+          querySnapshot = await _products
+              .where("productCategory", isEqualTo: selectedCategoryDocRef)
+              .get();
+        }
       } else {
+        DocumentReference selectedBrandDocRef = _brands.doc(brandId);
         querySnapshot = await _products
-            .where("productCategory", isEqualTo: selectedCategoryDocRef)
+            .where("productBrand", isEqualTo: selectedBrandDocRef)
             .get();
       }
 

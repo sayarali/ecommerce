@@ -7,4 +7,5 @@ class NavigationConstants {
   static const PHONE_AUTH_VIEW = "/phone_auth_view";
   static const HOME_VIEW = "/home_view";
   static const PRODUCT_DETAILS_VIEW = "/product_details_view";
+  static const PRODUCTS_VIEW = "/products_view";
 }

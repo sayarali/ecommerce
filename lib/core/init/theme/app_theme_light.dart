@@ -31,9 +31,17 @@ class AppThemeLight extends AppTheme {
           backgroundColor: Colors.white38,
           selectedColor: Colors.orange,
           brightness: Brightness.light),
-      iconTheme: IconThemeData(color: Colors.black87),
+      iconTheme: const IconThemeData(color: Colors.black87),
       iconButtonTheme: IconButtonThemeData(
           style: ButtonStyle(
               iconColor: MaterialStateProperty.all(Colors.black87))),
-      buttonTheme: ButtonThemeData(buttonColor: Colors.orange));
+      buttonTheme: const ButtonThemeData(buttonColor: Colors.orange),
+      appBarTheme: const AppBarTheme(
+          backgroundColor: Colors.transparent,
+          elevation: 0.0,
+          iconTheme: IconThemeData(color: Colors.black87),
+          titleTextStyle: TextStyle(
+              color: Colors.black87,
+              fontWeight: FontWeight.w400,
+              fontSize: 18)));
 }

@@ -145,7 +145,9 @@ class _MainViewState extends BaseState<MainView> {
                         children: [
                           const Text("Yeni ürünler"),
                           InkWell(
-                            onTap: () {},
+                            onTap: () {
+                              viewModel.goToNewProducts();
+                            },
                             child: Padding(
                               padding: const EdgeInsets.all(8.0),
                               child: Text(
@@ -194,7 +196,9 @@ class _MainViewState extends BaseState<MainView> {
                         children: [
                           const Text("Haftanın en popüler ürünleri"),
                           InkWell(
-                            onTap: () {},
+                            onTap: () {
+                              viewModel.goToAllPopularProducts();
+                            },
                             child: Padding(
                               padding: const EdgeInsets.all(8.0),
                               child: Text(

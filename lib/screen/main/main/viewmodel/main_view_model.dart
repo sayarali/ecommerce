@@ -1,4 +1,5 @@
 import 'package:ecommerce/core/base/model/base_view_model.dart';
+import 'package:ecommerce/core/constants/navigation/navigation_constants.dart';
 import 'package:ecommerce/core/model/brand_model.dart';
 import 'package:ecommerce/core/service/firebase_service.dart';
 import 'package:flutter/material.dart';
@@ -111,5 +112,25 @@ abstract class MainViewModelBase with Store, BaseViewModel {
     } catch (e) {
       print(e);
     }
+  }
+
+  void goToAllPopularProducts() {
+    Map<String, dynamic> data = Map();
+    data["title"] = "Popüler Ürünler";
+    data["option"] = "popular";
+    data["category"] = selectedCategory;
+    data["brand"] = "all";
+    navigation.navigateToPage(
+        path: NavigationConstants.PRODUCTS_VIEW, data: data);
+  }
+
+  void goToNewProducts() {
+    Map<String, dynamic> data = Map();
+    data["title"] = "Yeni Ürünler";
+    data["option"] = "new";
+    data["category"] = selectedCategory;
+    data["brand"] = "all";
+    navigation.navigateToPage(
+        path: NavigationConstants.PRODUCTS_VIEW, data: data);
   }
 }

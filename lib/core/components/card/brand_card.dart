@@ -1,6 +1,9 @@
+import 'package:ecommerce/core/init/navigation/navigation_service.dart';
 import 'package:ecommerce/core/model/brand_model.dart';
 import 'package:ecommerce/core/projectstyles/project_styles.dart';
 import 'package:flutter/material.dart';
+
+import '../../constants/navigation/navigation_constants.dart';
 
 class BrandCard extends StatelessWidget {
   const BrandCard({Key key, this.brandModel}) : super(key: key);
@@ -14,7 +17,7 @@ class BrandCard extends StatelessWidget {
           leading: Image.network(
             brandModel.brandImageUrl,
             errorBuilder: (context, object, stackTrace) {
-              return CircleAvatar(
+              return const CircleAvatar(
                 child: Icon(Icons.no_photography_rounded),
               );
             },
@@ -22,8 +25,16 @@ class BrandCard extends StatelessWidget {
           ),
           title: Text(brandModel.brandName),
           trailing: TextButton(
-            onPressed: () {},
-            child: Text("Ürünleri gör"),
+            onPressed: () {
+              Map<String, dynamic> data = {};
+              data["title"] = brandModel.brandName;
+              data["option"] = "no";
+              data["category"] = "no";
+              data["brand"] = brandModel.brandId;
+              NavigationService.instance.navigateToPage(
+                  path: NavigationConstants.PRODUCTS_VIEW, data: data);
+            },
+            child: const Text("Ürünleri gör"),
           ),
         ));
   }

@@ -5,6 +5,7 @@ import 'package:ecommerce/screen/auth/phoneauth/phone_auth_view.dart';
 import 'package:ecommerce/screen/auth/register/register_view.dart';
 import 'package:ecommerce/screen/auth/splash/splash_view.dart';
 import 'package:ecommerce/screen/main/home/home_view.dart';
+import 'package:ecommerce/screen/main/products/products_view.dart';
 import 'package:flutter/material.dart';
 
 import '../../../screen/main/product_details/product_details_views.dart';
@@ -34,6 +35,10 @@ class NavigationRoute {
       case NavigationConstants.PRODUCT_DETAILS_VIEW:
         return normalNavigate(ProductDetailsView(
           productModel: args.arguments as ProductModel,
+        ));
+      case NavigationConstants.PRODUCTS_VIEW:
+        return normalNavigate(ProductsView(
+          products: args.arguments as Map,
         ));
       default:
         return MaterialPageRoute(
