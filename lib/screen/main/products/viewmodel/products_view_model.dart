@@ -23,7 +23,7 @@ abstract class ProducstViewModelBase with Store, BaseViewModel {
   List<ProductModel> productsList;
 
   @action
-  void fetchProducts(String brandId, String categoryId, String option) async {
+  Future fetchProducts(String brandId, String categoryId, String option) async {
     if (option == "no") {
       if (categoryId == "no") {
         productsList = await firebaseService.getProducts(categoryId, brandId);

@@ -1,7 +1,9 @@
 import 'package:ecommerce/core/base/state/base_state.dart';
 import 'package:ecommerce/core/base/view/base_view.dart';
+import 'package:ecommerce/core/components/card/horizontal_product_card.dart';
 import 'package:ecommerce/screen/main/products/viewmodel/products_view_model.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter_mobx/flutter_mobx.dart';
 
 class ProductsView extends StatefulWidget {
   const ProductsView({Key key, this.products}) : super(key: key);
@@ -36,6 +38,34 @@ class _ProductsViewState extends BaseState<ProductsView> {
           backgroundColor: Colors.transparent,
           elevation: 0.0,
           title: Text(widget.products["title"]),
+        ),
+        body: SingleChildScrollView(
+          child: Column(
+            children: [
+              Container(
+                margin: const EdgeInsets.symmetric(horizontal: 12, vertical: 8),
+                child: Observer(builder: (_) {
+                  return viewModel.productsList != null &&
+                          viewModel.productsList.isNotEmpty
+                      ? ListView.builder(
+                          physics: const NeverScrollableScrollPhysics(),
+                          shrinkWrap: true,
+                          itemCount: viewModel.productsList.length,
+                          itemBuilder: (context, index) {
+                            return SizedBox(
+                              height: dynamicHeight(0.18),
+                              child: HorizontalProductCard(
+                                productModel: viewModel.productsList[index],
+                                themeData: themeData,
+                                onPressed: () {},
+                              ),
+                            );
+                          })
+                      : const Center(child: LinearProgressIndicator());
+                }),
+              ),
+            ],
+          ),
         ),
       );
 }
