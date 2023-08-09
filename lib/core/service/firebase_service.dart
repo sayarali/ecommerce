@@ -2,6 +2,7 @@ import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:ecommerce/core/model/brand_model.dart';
 import 'package:ecommerce/core/model/category_model.dart';
 import 'package:ecommerce/core/model/product_model.dart';
+import 'package:firebase_auth/firebase_auth.dart';
 
 class FirebaseService {
   final CollectionReference _categories =
@@ -10,6 +11,10 @@ class FirebaseService {
       FirebaseFirestore.instance.collection("products");
   final CollectionReference _brands =
       FirebaseFirestore.instance.collection("brands");
+  final CollectionReference _favorites = FirebaseFirestore.instance
+      .collection("users")
+      .doc(FirebaseAuth.instance.currentUser.uid)
+      .collection("favorite_products");
 
   Future<List<CategoryModel>> getCategories() async {
     List<CategoryModel> categoryList = [];
@@ -46,6 +51,7 @@ class FirebaseService {
             .get();
       }
 
+      QuerySnapshot favQuery = await _favorites.get();
       List<ProductModel> productList = [];
 
       for (QueryDocumentSnapshot e in querySnapshot.docs) {
@@ -56,128 +62,45 @@ class FirebaseService {
         DocumentReference brandDocRef = _brands.doc(e['productBrand'].id);
         BrandModel brandModel =
             BrandModel.fromFirestore(await brandDocRef.get());
-
-        ProductModel productModel = ProductModel(
-            productId: e.id,
-            productName: e['productName'],
-            productBrand: brandModel,
-            productCategory: categoryModel,
-            productExplanation: e['productExplanation'],
-            productImageThumbnailUrl: e['productImageThumbnailUrl'],
-            productPrice: e['productPrice'],
-            productStock: e['productStock'],
-            productViews: e['productViews'],
-            productWeeksViews: e['productWeeksViews'],
-            productLike: e['productLike'],
-            productCreatedTime:
-                (e['productCreatedTime'] as Timestamp).toDate());
-
-        productList.add(productModel);
-      }
-
-      return productList;
-    } catch (e) {
-      throw Exception("Veriler alınırken bir hata oluştu: $e");
-    }
-  }
-
-  Future<List<ProductModel>> getTopWeekViewedProducts(
-      int limit, String categoryId) async {
-    try {
-      DocumentReference selectedCategoryDocRef = _categories.doc(categoryId);
-      QuerySnapshot querySnapshot;
-      if (categoryId == "all") {
-        querySnapshot = await _products
-            .orderBy('productWeeksViews', descending: true)
-            .limit(limit)
-            .get();
-      } else {
-        querySnapshot = await _products
-            .where("productCategory", isEqualTo: selectedCategoryDocRef)
-            .orderBy('productWeeksViews', descending: true)
-            .limit(limit)
-            .get();
-      }
-
-      List<ProductModel> productList = [];
-
-      for (QueryDocumentSnapshot e in querySnapshot.docs) {
-        DocumentReference categoryDocRef =
-            _categories.doc(e['productCategory'].id);
-        CategoryModel categoryModel =
-            CategoryModel.fromFirestore(await categoryDocRef.get());
-        DocumentReference brandDocRef = _brands.doc(e['productBrand'].id);
-        BrandModel brandModel =
-            BrandModel.fromFirestore(await brandDocRef.get());
-
-        ProductModel productModel = ProductModel(
-            productId: e.id,
-            productName: e['productName'],
-            productBrand: brandModel,
-            productCategory: categoryModel,
-            productExplanation: e['productExplanation'],
-            productImageThumbnailUrl: e['productImageThumbnailUrl'],
-            productPrice: e['productPrice'],
-            productStock: e['productStock'],
-            productViews: e['productViews'],
-            productWeeksViews: e['productWeeksViews'],
-            productLike: e['productLike'],
-            productCreatedTime:
-                (e['productCreatedTime'] as Timestamp).toDate());
-
-        productList.add(productModel);
-      }
-
-      return productList;
-    } catch (e) {
-      throw Exception("Veriler alınırken bir hata oluştu: $e");
-    }
-  }
-
-  Future<List<ProductModel>> getNewProducts(
-      int limit, String categoryId) async {
-    try {
-      DocumentReference selectedCategoryDocRef = _categories.doc(categoryId);
-      QuerySnapshot querySnapshot;
-      if (categoryId == "all") {
-        querySnapshot = await _products
-            .orderBy('productCreatedTime', descending: true)
-            .limit(limit)
-            .get();
-      } else {
-        querySnapshot = await _products
-            .where("productCategory", isEqualTo: selectedCategoryDocRef)
-            .orderBy('productCreatedTime', descending: true)
-            .limit(limit)
-            .get();
-      }
-
-      List<ProductModel> productList = [];
-
-      for (QueryDocumentSnapshot e in querySnapshot.docs) {
-        DocumentReference categoryDocRef =
-            _categories.doc(e['productCategory'].id);
-        CategoryModel categoryModel =
-            CategoryModel.fromFirestore(await categoryDocRef.get());
-        DocumentReference brandDocRef = _brands.doc(e['productBrand'].id);
-        BrandModel brandModel =
-            BrandModel.fromFirestore(await brandDocRef.get());
-
-        ProductModel productModel = ProductModel(
-            productId: e.id,
-            productName: e['productName'],
-            productBrand: brandModel,
-            productCategory: categoryModel,
-            productExplanation: e['productExplanation'],
-            productImageThumbnailUrl: e['productImageThumbnailUrl'],
-            productPrice: e['productPrice'],
-            productStock: e['productStock'],
-            productViews: e['productViews'],
-            productWeeksViews: e['productWeeksViews'],
-            productLike: e['productLike'],
-            productCreatedTime:
-                (e['productCreatedTime'] as Timestamp).toDate());
-
+        ProductModel productModel;
+        for (QueryDocumentSnapshot fav in favQuery.docs) {
+          if (fav["productId"] == e["productId"]) {
+            productModel = ProductModel(
+              productId: e.id,
+              productName: e['productName'],
+              productBrand: brandModel,
+              productCategory: categoryModel,
+              productExplanation: e['productExplanation'],
+              productImageThumbnailUrl: e['productImageThumbnailUrl'],
+              productPrice: e['productPrice'],
+              productStock: e['productStock'],
+              productViews: e['productViews'],
+              productWeeksViews: e['productWeeksViews'],
+              productLike: e['productLike'],
+              productCreatedTime:
+                  (e['productCreatedTime'] as Timestamp).toDate(),
+              isLike: true,
+            );
+            break;
+          } else {
+            productModel = ProductModel(
+              productId: e.id,
+              productName: e['productName'],
+              productBrand: brandModel,
+              productCategory: categoryModel,
+              productExplanation: e['productExplanation'],
+              productImageThumbnailUrl: e['productImageThumbnailUrl'],
+              productPrice: e['productPrice'],
+              productStock: e['productStock'],
+              productViews: e['productViews'],
+              productWeeksViews: e['productWeeksViews'],
+              productLike: e['productLike'],
+              productCreatedTime:
+                  (e['productCreatedTime'] as Timestamp).toDate(),
+              isLike: false,
+            );
+          }
+        }
         productList.add(productModel);
       }
 
@@ -204,6 +127,62 @@ class FirebaseService {
           .toList();
     } catch (e) {
       throw Exception("Marka verileri alınırken bir hata oluştu: $e");
+    }
+  }
+
+  Future<void> addFavorite(String productId) async {
+    try {
+      Map<String, String> data = {};
+      data["productId"] = productId;
+      await _favorites.doc(productId).set(data);
+    } catch (e) {
+      throw Exception("Ürün eklenirken bir hata oluştu: $e");
+    }
+  }
+
+  Future<void> removeFavorite(String productId) async {
+    try {
+      await _favorites.doc(productId).delete();
+    } catch (e) {
+      throw Exception("Ürün eklenirken bir hata oluştu: $e");
+    }
+  }
+
+  Future<List<ProductModel>> getFavoriteProducts() async {
+    try {
+      QuerySnapshot querySnapshot = await _favorites.get();
+      List<ProductModel> productsList = [];
+      for (QueryDocumentSnapshot fav in querySnapshot.docs) {
+        DocumentSnapshot productSnapshot = await _products.doc(fav.id).get();
+        DocumentReference categoryDocRef =
+            _categories.doc(productSnapshot['productCategory'].id);
+        CategoryModel categoryModel =
+            CategoryModel.fromFirestore(await categoryDocRef.get());
+        DocumentReference brandDocRef =
+            _brands.doc(productSnapshot['productBrand'].id);
+        BrandModel brandModel =
+            BrandModel.fromFirestore(await brandDocRef.get());
+        ProductModel productModel = ProductModel(
+          productId: productSnapshot.id,
+          productName: productSnapshot['productName'],
+          productBrand: brandModel,
+          productCategory: categoryModel,
+          productExplanation: productSnapshot['productExplanation'],
+          productImageThumbnailUrl: productSnapshot['productImageThumbnailUrl'],
+          productPrice: productSnapshot['productPrice'],
+          productStock: productSnapshot['productStock'],
+          productViews: productSnapshot['productViews'],
+          productWeeksViews: productSnapshot['productWeeksViews'],
+          productLike: productSnapshot['productLike'],
+          productCreatedTime:
+              (productSnapshot['productCreatedTime'] as Timestamp).toDate(),
+          isLike: true,
+        );
+        productsList.add(productModel);
+      }
+      return productsList;
+    } catch (e) {
+      throw Exception("Favori ürünler alınırken bir hata oluştu: $e");
     }
   }
 }

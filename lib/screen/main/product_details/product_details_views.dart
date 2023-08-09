@@ -5,6 +5,7 @@ import 'package:flutter_mobx/flutter_mobx.dart';
 
 import '../../../core/base/state/base_state.dart';
 import '../../../core/model/product_model.dart';
+import '../../../core/service/firebase_service.dart';
 
 class ProductDetailsView extends StatefulWidget {
   const ProductDetailsView({Key key, this.productModel}) : super(key: key);
@@ -39,12 +40,28 @@ class _ProductDetailsViewState extends BaseState<ProductDetailsView> {
                 .copyWith(color: themeData.colorScheme.onBackground),
           ),
           actions: [
-            IconButton(
-                onPressed: () {
-                  ScaffoldMessenger.of(context).showSnackBar(
-                      SnackBar(content: Text("Favorilere eklenecek")));
-                },
-                icon: Icon(Icons.favorite_border_rounded))
+            widget.productModel.isLike
+                ? IconButton(
+                    onPressed: () async {
+                      await FirebaseService()
+                          .removeFavorite(widget.productModel.productId);
+                      widget.productModel.isLike = false;
+                      setState(() {});
+                    },
+                    icon: Icon(
+                      Icons.favorite_rounded,
+                      color: themeData.colorScheme.error,
+                    ))
+                : IconButton(
+                    onPressed: () async {
+                      await FirebaseService()
+                          .addFavorite(widget.productModel.productId);
+                      widget.productModel.isLike = true;
+                      setState(() {});
+                    },
+                    icon: const Icon(
+                      Icons.favorite_outline_rounded,
+                    ))
           ],
         ),
         body: SingleChildScrollView(

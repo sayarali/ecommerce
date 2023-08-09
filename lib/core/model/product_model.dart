@@ -15,6 +15,7 @@ class ProductModel {
   int productWeeksViews;
   int productLike;
   DateTime productCreatedTime;
+  bool isLike;
 
   ProductModel({
     this.productId,
@@ -29,6 +30,7 @@ class ProductModel {
     this.productWeeksViews,
     this.productLike,
     this.productCreatedTime,
+    this.isLike = false,
   });
 
   factory ProductModel.fromFirestore(DocumentSnapshot snapshot) {

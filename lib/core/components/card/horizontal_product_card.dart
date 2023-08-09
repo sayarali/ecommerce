@@ -1,27 +1,32 @@
+import 'package:ecommerce/core/base/state/base_state.dart';
 import 'package:ecommerce/core/constants/navigation/navigation_constants.dart';
 import 'package:ecommerce/core/model/product_model.dart';
 import 'package:ecommerce/core/projectstyles/project_styles.dart';
+import 'package:ecommerce/core/service/firebase_service.dart';
 import 'package:flutter/material.dart';
 
 import '../../init/navigation/navigation_service.dart';
 
-class HorizontalProductCard extends StatelessWidget {
-  const HorizontalProductCard({
-    Key key,
-    this.productModel,
-    this.themeData,
-    this.onPressed,
-  }) : super(key: key);
+class HorizontalProductCard extends StatefulWidget {
+  const HorizontalProductCard(
+      {Key key, this.productModel, this.themeData, this.onPressed})
+      : super(key: key);
   final ProductModel productModel;
   final ThemeData themeData;
   final VoidCallback onPressed;
 
   @override
+  State<HorizontalProductCard> createState() => _HorizontalProductCardState();
+}
+
+class _HorizontalProductCardState extends BaseState<HorizontalProductCard> {
+  @override
   Widget build(BuildContext context) {
     return InkWell(
       onTap: () {
         NavigationService.instance.navigateToPage(
-            path: NavigationConstants.PRODUCT_DETAILS_VIEW, data: productModel);
+            path: NavigationConstants.PRODUCT_DETAILS_VIEW,
+            data: widget.productModel);
       },
       child: Container(
         margin: const EdgeInsets.symmetric(vertical: 10, horizontal: 4),
@@ -31,7 +36,7 @@ class HorizontalProductCard extends StatelessWidget {
             Expanded(
               flex: 2,
               child: Image.network(
-                productModel.productImageThumbnailUrl,
+                widget.productModel.productImageThumbnailUrl,
                 errorBuilder: (context, object, stackTrace) {
                   return CircleAvatar(
                     child: Icon(Icons.not_interested_rounded),
@@ -54,13 +59,13 @@ class HorizontalProductCard extends StatelessWidget {
                         crossAxisAlignment: CrossAxisAlignment.start,
                         children: [
                           Text(
-                            productModel.productBrand.brandName,
+                            widget.productModel.productBrand.brandName,
                             style: const TextStyle(
                               fontWeight: FontWeight.w600,
                             ),
                           ),
                           Text(
-                            productModel.productName,
+                            widget.productModel.productName,
                             softWrap: true,
                             maxLines: 2,
                           ),
@@ -70,7 +75,7 @@ class HorizontalProductCard extends StatelessWidget {
                     Expanded(
                         flex: 1,
                         child: Text(
-                          "${productModel.productPrice} ₺",
+                          "${widget.productModel.productPrice} ₺",
                           style: themeData.textTheme.bodyMedium.copyWith(
                               fontWeight: FontWeight.w600,
                               color: Colors.lightGreen),
@@ -80,7 +85,10 @@ class HorizontalProductCard extends StatelessWidget {
                       child: Row(
                         children: [
                           OutlinedButton(
-                            onPressed: () {},
+                            onPressed: () {
+                              ScaffoldMessenger.of(context).showSnackBar(
+                                  SnackBar(content: Text("Sepete eklenecek")));
+                            },
                             child: Text(
                               "Sepete Ekle",
                               style: themeData.textTheme.labelMedium,
@@ -98,12 +106,28 @@ class HorizontalProductCard extends StatelessWidget {
                 child: Column(
                   mainAxisAlignment: MainAxisAlignment.start,
                   children: [
-                    IconButton(
-                      icon: const Icon(Icons.favorite_border_rounded),
-                      onPressed: () {
-                        print(productModel.productId);
-                      },
-                    ),
+                    widget.productModel.isLike
+                        ? IconButton(
+                            icon: Icon(
+                              Icons.favorite_rounded,
+                              color: themeData.colorScheme.error,
+                            ),
+                            onPressed: () async {
+                              await FirebaseService().removeFavorite(
+                                  widget.productModel.productId);
+                              widget.productModel.isLike = false;
+                              setState(() {});
+                            },
+                          )
+                        : IconButton(
+                            icon: const Icon(Icons.favorite_border_rounded),
+                            onPressed: () async {
+                              await FirebaseService()
+                                  .addFavorite(widget.productModel.productId);
+                              widget.productModel.isLike = true;
+                              setState(() {});
+                            },
+                          )
                   ],
                 ))
           ],

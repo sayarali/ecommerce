@@ -88,8 +88,14 @@ abstract class MainViewModelBase with Store, BaseViewModel {
   @action
   Future fetchPopularProductsList(String categoryId) async {
     try {
-      popularProductsList =
-          await firebaseService.getTopWeekViewedProducts(10, selectedCategory);
+      List<ProductModel> a =
+          await firebaseService.getProducts(selectedCategory, "no");
+      a.sort((a, b) => b.productWeeksViews.compareTo(a.productWeeksViews));
+      if (a.length > 10) {
+        popularProductsList = a.sublist(0, 10);
+      } else {
+        popularProductsList = a;
+      }
     } catch (e) {
       print(e);
     }
@@ -98,8 +104,14 @@ abstract class MainViewModelBase with Store, BaseViewModel {
   @action
   Future fetchNewProductsList(String categoryId) async {
     try {
-      newProductsList =
-          await firebaseService.getNewProducts(10, selectedCategory);
+      List<ProductModel> a =
+          await firebaseService.getProducts(selectedCategory, "no");
+      a.sort((a, b) => b.productCreatedTime.compareTo(a.productCreatedTime));
+      if (a.length > 10) {
+        newProductsList = a.sublist(0, 10);
+      } else {
+        newProductsList = a;
+      }
     } catch (e) {
       print(e);
     }
@@ -119,7 +131,7 @@ abstract class MainViewModelBase with Store, BaseViewModel {
     data["title"] = "Popüler Ürünler";
     data["option"] = "popular";
     data["category"] = selectedCategory;
-    data["brand"] = "all";
+    data["brand"] = "no";
     navigation.navigateToPage(
         path: NavigationConstants.PRODUCTS_VIEW, data: data);
   }
@@ -129,7 +141,7 @@ abstract class MainViewModelBase with Store, BaseViewModel {
     data["title"] = "Yeni Ürünler";
     data["option"] = "new";
     data["category"] = selectedCategory;
-    data["brand"] = "all";
+    data["brand"] = "no";
     navigation.navigateToPage(
         path: NavigationConstants.PRODUCTS_VIEW, data: data);
   }

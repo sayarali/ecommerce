@@ -91,7 +91,7 @@ class _MainViewState extends BaseState<MainView> {
                           children: [
                             Observer(builder: (_) {
                               return FilterChip(
-                                  label: Text("Hepsi"),
+                                  label: const Text("Hepsi"),
                                   selected: viewModel.selectedCategory == "all",
                                   onSelected: (value) {
                                     viewModel.selectCategory("all");

@@ -31,13 +31,23 @@ abstract class ProducstViewModelBase with Store, BaseViewModel {
         productsList = await firebaseService.getProducts(categoryId, brandId);
       }
     } else if (option == "new") {
-      productsList = await firebaseService.getNewProducts(20, categoryId);
+      List<ProductModel> a =
+          await firebaseService.getProducts(categoryId, brandId);
+      a.sort((a, b) => b.productCreatedTime.compareTo(a.productCreatedTime));
+      if (a.length > 10) {
+        productsList = a.sublist(0, 10);
+      } else {
+        productsList = a;
+      }
     } else if (option == "popular") {
-      productsList =
-          await firebaseService.getTopWeekViewedProducts(20, categoryId);
-    }
-    for (var i in productsList) {
-      print(i.productName);
+      List<ProductModel> a =
+          await firebaseService.getProducts(categoryId, brandId);
+      a.sort((a, b) => b.productWeeksViews.compareTo(a.productWeeksViews));
+      if (a.length > 10) {
+        productsList = a.sublist(0, 10);
+      } else {
+        productsList = a;
+      }
     }
   }
 }

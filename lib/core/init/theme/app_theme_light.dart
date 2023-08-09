@@ -43,5 +43,6 @@ class AppThemeLight extends AppTheme {
           titleTextStyle: TextStyle(
               color: Colors.black87,
               fontWeight: FontWeight.w400,
-              fontSize: 18)));
+              fontSize: 18)),
+      progressIndicatorTheme: ProgressIndicatorThemeData(color: Colors.orange));
 }

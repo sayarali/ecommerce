@@ -38,6 +38,9 @@ class _ProductsViewState extends BaseState<ProductsView> {
           backgroundColor: Colors.transparent,
           elevation: 0.0,
           title: Text(widget.products["title"]),
+          actions: [
+            IconButton(onPressed: () {}, icon: Icon(Icons.sort_rounded))
+          ],
         ),
         body: SingleChildScrollView(
           child: Column(
@@ -45,22 +48,25 @@ class _ProductsViewState extends BaseState<ProductsView> {
               Container(
                 margin: const EdgeInsets.symmetric(horizontal: 12, vertical: 8),
                 child: Observer(builder: (_) {
-                  return viewModel.productsList != null &&
-                          viewModel.productsList.isNotEmpty
-                      ? ListView.builder(
-                          physics: const NeverScrollableScrollPhysics(),
-                          shrinkWrap: true,
-                          itemCount: viewModel.productsList.length,
-                          itemBuilder: (context, index) {
-                            return SizedBox(
-                              height: dynamicHeight(0.18),
-                              child: HorizontalProductCard(
-                                productModel: viewModel.productsList[index],
-                                themeData: themeData,
-                                onPressed: () {},
-                              ),
-                            );
-                          })
+                  return viewModel.productsList != null
+                      ? viewModel.productsList.isEmpty
+                          ? Center(
+                              child: Text("Bu kategoride ürün yok."),
+                            )
+                          : ListView.builder(
+                              physics: const NeverScrollableScrollPhysics(),
+                              shrinkWrap: true,
+                              itemCount: viewModel.productsList.length,
+                              itemBuilder: (context, index) {
+                                return SizedBox(
+                                  height: dynamicHeight(0.18),
+                                  child: HorizontalProductCard(
+                                    productModel: viewModel.productsList[index],
+                                    themeData: themeData,
+                                    onPressed: () {},
+                                  ),
+                                );
+                              })
                       : const Center(child: LinearProgressIndicator());
                 }),
               ),
