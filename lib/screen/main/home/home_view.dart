@@ -6,6 +6,7 @@ import 'package:ecommerce/screen/main/favorites/favorites_view.dart';
 import 'package:ecommerce/screen/main/home/viewmodel/home_view_model.dart';
 import 'package:ecommerce/screen/main/main/main_view.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter_mobx/flutter_mobx.dart';
 
 import '../../../core/components/bottom_sheet/custom_bottom_sheet.dart';
 
@@ -91,7 +92,9 @@ class _HomeViewState extends BaseState<HomeView> with TickerProviderStateMixin {
         ),
         floatingActionButton: FloatingActionButton(
           onPressed: () {
+            viewModel.getBasket();
             showModalBottomSheet(
+              isScrollControlled: true,
               shape: const RoundedRectangleBorder(
                 borderRadius: BorderRadius.vertical(
                   top: Radius.circular(25.0),
@@ -101,16 +104,117 @@ class _HomeViewState extends BaseState<HomeView> with TickerProviderStateMixin {
               builder: (BuildContext context) {
                 return CustomBottomSheet(
                   header: Row(
-                    mainAxisAlignment: MainAxisAlignment.center,
-                    children: const [
-                      Text("Sepetim"),
-                      SizedBox(
-                        width: 4,
+                    mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                    children: [
+                      Row(
+                        children: const [
+                          Icon(Icons.shopping_cart),
+                          SizedBox(
+                            width: 4,
+                          ),
+                          Text("Sepetim"),
+                        ],
                       ),
-                      Icon(Icons.shopping_cart),
+                      Row(
+                        children: [
+                          Text("Sepeti Boşalt"),
+                          IconButton(
+                              onPressed: () async {
+                                await viewModel.emptyBasket();
+                                viewModel.getBasket();
+                              },
+                              icon: Icon(
+                                Icons.delete_forever_rounded,
+                                color: themeData.colorScheme.error,
+                              ))
+                        ],
+                      )
                     ],
                   ),
-                  children: [Text("data")],
+                  children: [
+                    Observer(builder: (_) {
+                      return viewModel.productList.isNotEmpty
+                          ? ListView.separated(
+                              physics: const NeverScrollableScrollPhysics(),
+                              shrinkWrap: true,
+                              itemCount: viewModel.productList.length,
+                              itemBuilder: (context, index) {
+                                return Dismissible(
+                                  key: Key(viewModel
+                                      .productList[index].product.productId),
+                                  onDismissed: (direction) {
+                                    viewModel.removeBasket(viewModel
+                                        .productList[index].product.productId);
+                                    viewModel.getBasket();
+                                  },
+                                  background: Container(
+                                    color: themeData.colorScheme.secondary,
+                                    child: Row(
+                                      mainAxisAlignment:
+                                          MainAxisAlignment.spaceBetween,
+                                      children: [
+                                        Padding(
+                                          padding:
+                                              const EdgeInsets.only(left: 16.0),
+                                          child: Icon(
+                                            Icons.delete_forever_rounded,
+                                            color: themeData.cardColor,
+                                          ),
+                                        ),
+                                        Padding(
+                                          padding: const EdgeInsets.only(
+                                              right: 16.0),
+                                          child: Icon(
+                                            Icons.delete_forever_rounded,
+                                            color: themeData.cardColor,
+                                          ),
+                                        ),
+                                      ],
+                                    ),
+                                  ),
+                                  child: ListTile(
+                                      leading: Image.network(viewModel
+                                          .productList[index]
+                                          .product
+                                          .productImageThumbnailUrl),
+                                      title: Text(
+                                        viewModel.productList[index].product
+                                            .productName,
+                                        maxLines: 1,
+                                      ),
+                                      subtitle: Text(
+                                        viewModel.productList[index].product
+                                            .productBrand.brandName,
+                                        maxLines: 1,
+                                      ),
+                                      trailing: Text(
+                                          "${viewModel.productList[index].product.productPrice} ₺")),
+                                );
+                              },
+                              separatorBuilder:
+                                  (BuildContext context, int index) {
+                                return const Divider();
+                              },
+                            )
+                          : Container(
+                              padding: const EdgeInsets.all(24),
+                              child: const Text("Sepetinizde ürün yok."));
+                    }),
+                    Row(
+                      mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                      children: [
+                        Observer(builder: (_) {
+                          return Text("Toplam: ${viewModel.totalPrice}");
+                        }),
+                        OutlinedButton(
+                            onPressed: () async {
+                              await viewModel.completeShop();
+                              viewModel.getBasket();
+                            },
+                            child: Text("Alışverişi Tamamla")),
+                      ],
+                    )
+                  ],
                 );
               },
             );

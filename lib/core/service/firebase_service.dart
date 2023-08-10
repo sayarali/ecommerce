@@ -1,8 +1,11 @@
 import 'package:cloud_firestore/cloud_firestore.dart';
+import 'package:ecommerce/core/model/basket_model.dart';
 import 'package:ecommerce/core/model/brand_model.dart';
 import 'package:ecommerce/core/model/category_model.dart';
 import 'package:ecommerce/core/model/product_model.dart';
 import 'package:firebase_auth/firebase_auth.dart';
+
+import '../model/order_model.dart';
 
 class FirebaseService {
   final CollectionReference _categories =
@@ -19,6 +22,10 @@ class FirebaseService {
       .collection("users")
       .doc(FirebaseAuth.instance.currentUser.uid)
       .collection("basket");
+  final CollectionReference _myOrders = FirebaseFirestore.instance
+      .collection("users")
+      .doc(FirebaseAuth.instance.currentUser.uid)
+      .collection("myOrders");
 
   Future<List<CategoryModel>> getCategories() async {
     List<CategoryModel> categoryList = [];
@@ -211,8 +218,9 @@ class FirebaseService {
 
   Future<void> addBasket(String productId) async {
     try {
-      Map<String, String> data = {};
+      Map<String, dynamic> data = {};
       data["productId"] = productId;
+      data["count"] = 1;
       await _basket.doc(productId).set(data);
     } catch (e) {
       throw Exception("Sepete ürün eklenirken bir hata oluştu: $e");
@@ -227,10 +235,21 @@ class FirebaseService {
     }
   }
 
-  Future<List<ProductModel>> getBasketProducts() async {
+  Future<void> emptyBasket() async {
     try {
       QuerySnapshot querySnapshot = await _basket.get();
-      List<ProductModel> productsList = [];
+      for (var document in querySnapshot.docs) {
+        document.reference.delete();
+      }
+    } catch (e) {
+      throw Exception("Sepet silinirken bir hata oluştu: $e");
+    }
+  }
+
+  Future<List<BasketModel>> getBasketProducts() async {
+    try {
+      QuerySnapshot querySnapshot = await _basket.get();
+      List<BasketModel> productsList = [];
       for (QueryDocumentSnapshot basket in querySnapshot.docs) {
         DocumentSnapshot productSnapshot = await _products.doc(basket.id).get();
         DocumentReference categoryDocRef =
@@ -257,11 +276,35 @@ class FirebaseService {
               (productSnapshot['productCreatedTime'] as Timestamp).toDate(),
           isLike: true,
         );
-        productsList.add(productModel);
+        BasketModel basketModel = BasketModel(
+          product: productModel,
+          count: basket["count"],
+        );
+        productsList.add(basketModel);
       }
       return productsList;
     } catch (e) {
       throw Exception("Sepetteki ürünler alınırken bir hata oluştu: $e");
+    }
+  }
+
+  Future<void> completeShop(OrderModel orderModel, double totalPrice) async {
+    try {
+      await _myOrders.add({
+        'totalPrice': totalPrice,
+        'date': orderModel.date,
+        'products': orderModel.products.map((product) {
+          return {
+            'product': {
+              'id': product.product.productId,
+              'price': product.product.productPrice,
+            },
+            'count': product.count,
+          };
+        }).toList(),
+      });
+    } catch (e) {
+      throw Exception("Alışveriş tamamlanırken bir hata oluştu: $e");
     }
   }
 }

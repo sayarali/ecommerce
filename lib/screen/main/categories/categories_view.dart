@@ -31,6 +31,7 @@ class _CategoriesViewState extends BaseState<CategoriesView> {
   Scaffold buildScaffold(CategoriesViewModel viewModel) => Scaffold(
         appBar: AppBar(
           title: const Text("Tüm Kategoriler"),
+          leading: const Icon(Icons.category_rounded),
         ),
         body: Container(
             margin: EdgeInsets.symmetric(horizontal: 12, vertical: 8),
