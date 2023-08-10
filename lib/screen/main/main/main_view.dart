@@ -41,7 +41,7 @@ class _MainViewState extends BaseState<MainView> {
           title: Observer(
             builder: (_) {
               return viewModel.isSearching
-                  ? _buildSearchField()
+                  ? _buildSearchField(viewModel)
                   : Text(
                       "Anasayfa",
                       style: themeData.textTheme.titleLarge.copyWith(
@@ -261,13 +261,16 @@ class _MainViewState extends BaseState<MainView> {
     );
   }
 
-  Widget _buildSearchField() {
+  Widget _buildSearchField(MainViewModel viewModel) {
     return TextField(
+      controller: viewModel.searchController,
       decoration: InputDecoration(
         hintText: "Arama yap...",
         border: InputBorder.none,
       ),
-      onChanged: (value) {},
+      onChanged: (value) {
+        print(value);
+      },
     );
   }
 }

@@ -1,4 +1,5 @@
 import 'package:ecommerce/core/base/state/base_state.dart';
+import 'package:ecommerce/core/components/app_progress.dart';
 import 'package:ecommerce/core/constants/navigation/navigation_constants.dart';
 import 'package:ecommerce/core/model/product_model.dart';
 import 'package:ecommerce/core/projectstyles/project_styles.dart';
@@ -86,8 +87,10 @@ class _HorizontalProductCardState extends BaseState<HorizontalProductCard> {
                         children: [
                           OutlinedButton(
                             onPressed: () async {
+                              buildShowProgress();
                               await FirebaseService()
                                   .addBasket(widget.productModel.productId);
+                              buildCloseProgress();
                               ScaffoldMessenger.of(context).showSnackBar(
                                   SnackBar(
                                       content: Text("Ürün sepete eklendi.")));
@@ -138,4 +141,8 @@ class _HorizontalProductCardState extends BaseState<HorizontalProductCard> {
       ),
     );
   }
+
+  buildCloseProgress() => AppProgress.closeProgress(context);
+
+  buildShowProgress() => AppProgress.showProgress(context);
 }

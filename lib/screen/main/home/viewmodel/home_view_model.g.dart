@@ -26,6 +26,23 @@ mixin _$HomeViewModel on HomeViewModelBase, Store {
     });
   }
 
+  final _$totalPriceAtom = Atom(
+    name: 'HomeViewModelBase.totalPrice',
+  );
+
+  @override
+  double get totalPrice {
+    _$totalPriceAtom.reportRead();
+    return super.totalPrice;
+  }
+
+  @override
+  set totalPrice(double value) {
+    _$totalPriceAtom.reportWrite(value, super.totalPrice, () {
+      super.totalPrice = value;
+    });
+  }
+
   final _$getBasketAsyncAction = AsyncAction(
     'HomeViewModelBase.getBasket',
   );
@@ -38,7 +55,8 @@ mixin _$HomeViewModel on HomeViewModelBase, Store {
   @override
   String toString() {
     return '''
-productList: ${productList}
+productList: ${productList},
+totalPrice: ${totalPrice}
     ''';
   }
 }

@@ -19,6 +19,8 @@ abstract class MainViewModelBase with Store, BaseViewModel {
     viewModelContext = context;
   }
 
+  TextEditingController searchController = TextEditingController();
+
   @observable
   List<CategoryModel> categoryList = [];
   @observable
@@ -145,4 +147,6 @@ abstract class MainViewModelBase with Store, BaseViewModel {
     navigation.navigateToPage(
         path: NavigationConstants.PRODUCTS_VIEW, data: data);
   }
+
+  Future searchProducts(String searchString) async {}
 }

@@ -33,8 +33,9 @@ abstract class HomeViewModelBase with Store, BaseViewModel {
   Future getBasket() async {
     try {
       productList = await firebaseService.getBasketProducts();
+      totalPrice = 0.0;
       for (var i in productList) {
-        totalPrice += i.product.productPrice;
+        totalPrice += i.product.productPrice * i.count;
       }
     } catch (e) {
       print(e);

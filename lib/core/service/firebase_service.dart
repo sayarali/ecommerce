@@ -274,7 +274,6 @@ class FirebaseService {
           productLike: productSnapshot['productLike'],
           productCreatedTime:
               (productSnapshot['productCreatedTime'] as Timestamp).toDate(),
-          isLike: true,
         );
         BasketModel basketModel = BasketModel(
           product: productModel,
@@ -305,6 +304,92 @@ class FirebaseService {
       });
     } catch (e) {
       throw Exception("Alışveriş tamamlanırken bir hata oluştu: $e");
+    }
+  }
+
+  Future<List<ProductModel>> searchInProducts(String searchString) async {
+    Future.delayed(const Duration(seconds: 1));
+    try {
+      QuerySnapshot querySnapshot = await _products
+          .where('productName', isGreaterThanOrEqualTo: searchString)
+          .where('productName', isLessThan: '${searchString}z')
+          .get();
+
+      List<QueryDocumentSnapshot> documents = querySnapshot.docs;
+
+      QuerySnapshot favQuery = await _favorites.get();
+      List<ProductModel> productList = [];
+      for (var doc in documents) {
+        DocumentReference categoryDocRef =
+            _categories.doc(doc['productCategory'].id);
+        CategoryModel categoryModel =
+            CategoryModel.fromFirestore(await categoryDocRef.get());
+        DocumentReference brandDocRef = _brands.doc(doc['productBrand'].id);
+        BrandModel brandModel =
+            BrandModel.fromFirestore(await brandDocRef.get());
+        ProductModel productModel;
+        if (favQuery.docs.length > 0) {
+          for (QueryDocumentSnapshot fav in favQuery.docs) {
+            if (doc["productId"] == fav["productId"]) {
+              productModel = ProductModel(
+                productId: doc.id,
+                productName: doc['productName'],
+                productBrand: brandModel,
+                productCategory: categoryModel,
+                productExplanation: doc['productExplanation'],
+                productImageThumbnailUrl: doc['productImageThumbnailUrl'],
+                productPrice: doc['productPrice'],
+                productStock: doc['productStock'],
+                productViews: doc['productViews'],
+                productWeeksViews: doc['productWeeksViews'],
+                productLike: doc['productLike'],
+                productCreatedTime:
+                    (doc['productCreatedTime'] as Timestamp).toDate(),
+                isLike: true,
+              );
+              break;
+            } else {
+              productModel = ProductModel(
+                productId: doc.id,
+                productName: doc['productName'],
+                productBrand: brandModel,
+                productCategory: categoryModel,
+                productExplanation: doc['productExplanation'],
+                productImageThumbnailUrl: doc['productImageThumbnailUrl'],
+                productPrice: doc['productPrice'],
+                productStock: doc['productStock'],
+                productViews: doc['productViews'],
+                productWeeksViews: doc['productWeeksViews'],
+                productLike: doc['productLike'],
+                productCreatedTime:
+                    (doc['productCreatedTime'] as Timestamp).toDate(),
+                isLike: false,
+              );
+            }
+          }
+        } else {
+          productModel = ProductModel(
+            productId: doc.id,
+            productName: doc['productName'],
+            productBrand: brandModel,
+            productCategory: categoryModel,
+            productExplanation: doc['productExplanation'],
+            productImageThumbnailUrl: doc['productImageThumbnailUrl'],
+            productPrice: doc['productPrice'],
+            productStock: doc['productStock'],
+            productViews: doc['productViews'],
+            productWeeksViews: doc['productWeeksViews'],
+            productLike: doc['productLike'],
+            productCreatedTime:
+                (doc['productCreatedTime'] as Timestamp).toDate(),
+            isLike: false,
+          );
+        }
+
+        productList.add(productModel);
+      }
+    } catch (e) {
+      throw Exception(e);
     }
   }
 }
