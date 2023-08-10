@@ -7,6 +7,8 @@ import 'package:ecommerce/screen/main/home/viewmodel/home_view_model.dart';
 import 'package:ecommerce/screen/main/main/main_view.dart';
 import 'package:flutter/material.dart';
 
+import '../../../core/components/bottom_sheet/custom_bottom_sheet.dart';
+
 class HomeView extends StatefulWidget {
   const HomeView({Key key}) : super(key: key);
 
@@ -88,7 +90,31 @@ class _HomeViewState extends BaseState<HomeView> with TickerProviderStateMixin {
           ),
         ),
         floatingActionButton: FloatingActionButton(
-          onPressed: () {},
+          onPressed: () {
+            showModalBottomSheet(
+              shape: const RoundedRectangleBorder(
+                borderRadius: BorderRadius.vertical(
+                  top: Radius.circular(25.0),
+                ),
+              ),
+              context: context,
+              builder: (BuildContext context) {
+                return CustomBottomSheet(
+                  header: Row(
+                    mainAxisAlignment: MainAxisAlignment.center,
+                    children: const [
+                      Text("Sepetim"),
+                      SizedBox(
+                        width: 4,
+                      ),
+                      Icon(Icons.shopping_cart),
+                    ],
+                  ),
+                  children: [Text("data")],
+                );
+              },
+            );
+          },
           child: const Icon(Icons.shopping_cart),
         ),
         floatingActionButtonLocation: FloatingActionButtonLocation.centerDocked,

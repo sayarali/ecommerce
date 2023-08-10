@@ -85,9 +85,12 @@ class _HorizontalProductCardState extends BaseState<HorizontalProductCard> {
                       child: Row(
                         children: [
                           OutlinedButton(
-                            onPressed: () {
+                            onPressed: () async {
+                              await FirebaseService()
+                                  .addBasket(widget.productModel.productId);
                               ScaffoldMessenger.of(context).showSnackBar(
-                                  SnackBar(content: Text("Sepete eklenecek")));
+                                  SnackBar(
+                                      content: Text("Ürün sepete eklendi.")));
                             },
                             child: Text(
                               "Sepete Ekle",
