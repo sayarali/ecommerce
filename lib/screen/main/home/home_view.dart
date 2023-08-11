@@ -224,28 +224,54 @@ class _HomeViewState extends BaseState<HomeView> with TickerProviderStateMixin {
 
   ListTile buildBasketListTile(int index) {
     return ListTile(
-        onTap: () {
-          NavigationService.instance.navigateToPage(
-              path: NavigationConstants.PRODUCT_DETAILS_VIEW,
-              data: viewModel.productList[index].product);
-        },
-        leading: Image.network(
-            viewModel.productList[index].product.productImageThumbnailUrl),
-        title: Text(
-          viewModel.productList[index].product.productName,
-          maxLines: 1,
-        ),
-        subtitle: Text(
-          viewModel.productList[index].product.productBrand.brandName,
-          maxLines: 1,
-        ),
-        trailing: Column(
-          crossAxisAlignment: CrossAxisAlignment.end,
-          mainAxisAlignment: MainAxisAlignment.spaceBetween,
-          children: [
-            Text(
-                "${viewModel.productList[index].product.productPrice * viewModel.productList[index].count} ₺"),
-          ],
-        ));
+      onTap: () {
+        NavigationService.instance.navigateToPage(
+            path: NavigationConstants.PRODUCT_DETAILS_VIEW,
+            data: viewModel.productList[index].product);
+      },
+      leading: Image.network(
+          viewModel.productList[index].product.productImageThumbnailUrl),
+      title: Text(
+        viewModel.productList[index].product.productName,
+        maxLines: 1,
+      ),
+      subtitle: Column(
+        mainAxisAlignment: MainAxisAlignment.start,
+        crossAxisAlignment: CrossAxisAlignment.start,
+        children: [
+          Text(
+            viewModel.productList[index].product.productBrand.brandName,
+            maxLines: 1,
+          ),
+          Row(
+            mainAxisAlignment: MainAxisAlignment.start,
+            crossAxisAlignment: CrossAxisAlignment.center,
+            children: [
+              IconButton(
+                  onPressed: () {
+                    viewModel.removeCount(viewModel.productList[index]);
+                  },
+                  icon: Icon(Icons.remove)),
+              Text(viewModel.productList[index].count.toString()),
+              IconButton(
+                  onPressed: () {
+                    viewModel.addCount(viewModel.productList[index]);
+                  },
+                  icon: Icon(Icons.add)),
+              Row(
+                mainAxisAlignment: MainAxisAlignment.end,
+                children: [
+                  Text(
+                    "${(viewModel.productList[index].product.productPrice * viewModel.productList[index].count).toStringAsFixed(2)} ₺",
+                    style: themeData.textTheme.bodyMedium
+                        .copyWith(color: Colors.green),
+                  ),
+                ],
+              ),
+            ],
+          )
+        ],
+      ),
+    );
   }
 }

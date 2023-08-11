@@ -34,30 +34,16 @@ abstract class MainViewModelBase with Store, BaseViewModel {
 
   @observable
   bool isSearching = false;
+  List<ProductModel> allProducts;
   @observable
-  List<String> searchedList = [
-    "macbook air",
-    "iphone 14",
-    "klima",
-    "macbook air",
-    "iphone 14",
-    "klima",
-    "macbook air",
-    "iphone 14",
-    "klima",
-    "macbook air",
-    "iphone 14",
-    "klima",
-    "macbook air",
-    "iphone 14",
-    "son"
-  ];
+  List<ProductModel> searchedList = [];
   @override
   void init() {
     fetchCategoryList();
     fetchPopularProductsList(selectedCategory);
     fetchNewProductsList(selectedCategory);
     fetchBrandsList(selectedCategory);
+    getAllProducts();
   }
 
   @action
@@ -148,5 +134,23 @@ abstract class MainViewModelBase with Store, BaseViewModel {
         path: NavigationConstants.PRODUCTS_VIEW, data: data);
   }
 
-  Future searchProducts(String searchString) async {}
+  Future getAllProducts() async {
+    allProducts = await firebaseService.getProducts("all", "no");
+  }
+
+  @action
+  Future searchProducts(String searchString) async {
+    searchedList = allProducts
+        .where((element) =>
+            element.productName
+                .toLowerCase()
+                .contains(searchString.toLowerCase()) ||
+            element.productBrand.brandName
+                .toLowerCase()
+                .contains(searchString) ||
+            element.productCategory.categoryName
+                .toLowerCase()
+                .contains(searchString))
+        .toList();
+  }
 }

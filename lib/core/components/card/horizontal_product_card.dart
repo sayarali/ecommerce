@@ -89,7 +89,7 @@ class _HorizontalProductCardState extends BaseState<HorizontalProductCard> {
                             onPressed: () async {
                               buildShowProgress();
                               await FirebaseService()
-                                  .addBasket(widget.productModel.productId);
+                                  .addBasket(widget.productModel.productId, 1);
                               buildCloseProgress();
                               ScaffoldMessenger.of(context).showSnackBar(
                                   SnackBar(

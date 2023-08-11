@@ -58,6 +58,39 @@ abstract class HomeViewModelBase with Store, BaseViewModel {
     }
   }
 
+  Future addCount(BasketModel basketModel) async {
+    try {
+      showProgress();
+      if (basketModel.count == basketModel.product.productStock) {
+        ScaffoldMessenger.of(viewModelContext)
+            .showSnackBar(const SnackBar(content: Text("Maksimum stok sayısı")));
+      } else {
+        await firebaseService.addBasket(
+            basketModel.product.productId, ++basketModel.count);
+      }
+      await getBasket();
+      closeProgress();
+    } catch (e) {
+      print(e);
+    }
+  }
+
+  Future removeCount(BasketModel basketModel) async {
+    try {
+      showProgress();
+      if (basketModel.count == 1) {
+        removeBasket(basketModel.product.productId);
+      } else {
+        await firebaseService.addBasket(
+            basketModel.product.productId, --basketModel.count);
+      }
+      await getBasket();
+      closeProgress();
+    } catch (e) {
+      print(e);
+    }
+  }
+
   Future completeShop() async {
     try {
       if (productList.isNotEmpty) {

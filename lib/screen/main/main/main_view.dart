@@ -7,6 +7,8 @@ import 'package:flutter_mobx/flutter_mobx.dart';
 
 import '../../../core/base/view/base_view.dart';
 import '../../../core/components/card/horizontal_product_card.dart';
+import '../../../core/constants/navigation/navigation_constants.dart';
+import '../../../core/init/navigation/navigation_service.dart';
 
 class MainView extends StatefulWidget {
   const MainView({Key key}) : super(key: key);
@@ -72,16 +74,30 @@ class _MainViewState extends BaseState<MainView> {
           child: Observer(builder: (_) {
             return viewModel.isSearching
                 ? SizedBox(
-                    height: MediaQuery.of(context).size.height,
+                    height: dynamicHeight(1),
                     child: Observer(
-                        builder: (_) => ListView.builder(
-                            shrinkWrap: true,
-                            itemCount: viewModel.searchedList.length,
-                            itemBuilder: (context, index) {
-                              return ListTile(
-                                title: Text(viewModel.searchedList[index]),
-                              );
-                            })),
+                        builder: (_) => viewModel.searchedList.isNotEmpty
+                            ? ListView.builder(
+                                shrinkWrap: true,
+                                itemCount: viewModel.searchedList.length,
+                                itemBuilder: (context, index) {
+                                  return ListTile(
+                                    onTap: () => NavigationService.instance
+                                        .navigateToPage(
+                                            path: NavigationConstants
+                                                .PRODUCT_DETAILS_VIEW,
+                                            data:
+                                                viewModel.searchedList[index]),
+                                    leading: Image.network(viewModel
+                                        .searchedList[index]
+                                        .productImageThumbnailUrl),
+                                    title: Text(
+                                        "${viewModel.searchedList[index].productBrand.brandName} "),
+                                    subtitle: Text(viewModel
+                                        .searchedList[index].productName),
+                                  );
+                                })
+                            : const SizedBox.shrink()),
                   )
                 : Column(
                     children: [
@@ -111,19 +127,20 @@ class _MainViewState extends BaseState<MainView> {
                       buildNewProducts(viewModel),
                       const Divider(),
                       Observer(builder: (_) {
-                        return viewModel.brandsList != null &&
-                                viewModel.brandsList.isNotEmpty
-                            ? ListView.builder(
-                                physics: NeverScrollableScrollPhysics(),
-                                shrinkWrap: true,
-                                itemCount: viewModel.brandsList.length,
-                                itemBuilder: (context, index) {
-                                  return BrandCard(
-                                    brandModel: viewModel.brandsList[index],
-                                  );
-                                },
-                              )
-                            : CircularProgressIndicator();
+                        return viewModel.brandsList != null
+                            ? viewModel.brandsList.isNotEmpty
+                                ? ListView.builder(
+                                    physics: NeverScrollableScrollPhysics(),
+                                    shrinkWrap: true,
+                                    itemCount: viewModel.brandsList.length,
+                                    itemBuilder: (context, index) {
+                                      return BrandCard(
+                                        brandModel: viewModel.brandsList[index],
+                                      );
+                                    },
+                                  )
+                                : const SizedBox.shrink()
+                            : const CircularProgressIndicator();
                       })
                     ],
                   );
@@ -177,8 +194,11 @@ class _MainViewState extends BaseState<MainView> {
                             height: dynamicHeight(0.18))),
                   ],
                 )
-              : const Text("Bu kategoride hiç ürün yok.")
-          : CircularProgressIndicator();
+              : const SizedBox.shrink()
+          : const Padding(
+              padding: EdgeInsets.symmetric(vertical: 20.0, horizontal: 8),
+              child: LinearProgressIndicator(),
+            );
     });
   }
 
@@ -233,7 +253,10 @@ class _MainViewState extends BaseState<MainView> {
                   ],
                 )
               : const Text("Bu kategoride hiç ürün yok.")
-          : CircularProgressIndicator();
+          : const Padding(
+              padding: EdgeInsets.symmetric(vertical: 20.0, horizontal: 8),
+              child: LinearProgressIndicator(),
+            );
     });
   }
 
@@ -268,8 +291,8 @@ class _MainViewState extends BaseState<MainView> {
         hintText: "Arama yap...",
         border: InputBorder.none,
       ),
-      onChanged: (value) {
-        print(value);
+      onChanged: (value) async {
+        await viewModel.searchProducts(value);
       },
     );
   }

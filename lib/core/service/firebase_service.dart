@@ -22,10 +22,8 @@ class FirebaseService {
       .collection("users")
       .doc(FirebaseAuth.instance.currentUser.uid)
       .collection("basket");
-  final CollectionReference _myOrders = FirebaseFirestore.instance
-      .collection("users")
-      .doc(FirebaseAuth.instance.currentUser.uid)
-      .collection("myOrders");
+  final CollectionReference _orders =
+      FirebaseFirestore.instance.collection("orders");
 
   Future<List<CategoryModel>> getCategories() async {
     List<CategoryModel> categoryList = [];
@@ -216,11 +214,11 @@ class FirebaseService {
     }
   }
 
-  Future<void> addBasket(String productId) async {
+  Future<void> addBasket(String productId, int count) async {
     try {
       Map<String, dynamic> data = {};
       data["productId"] = productId;
-      data["count"] = 1;
+      data["count"] = count;
       await _basket.doc(productId).set(data);
     } catch (e) {
       throw Exception("Sepete ürün eklenirken bir hata oluştu: $e");
@@ -289,7 +287,8 @@ class FirebaseService {
 
   Future<void> completeShop(OrderModel orderModel, double totalPrice) async {
     try {
-      await _myOrders.add({
+      await _orders.add({
+        'userId': FirebaseAuth.instance.currentUser.uid,
         'totalPrice': totalPrice,
         'date': orderModel.date,
         'products': orderModel.products.map((product) {
@@ -388,6 +387,7 @@ class FirebaseService {
 
         productList.add(productModel);
       }
+      return productList;
     } catch (e) {
       throw Exception(e);
     }

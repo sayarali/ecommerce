@@ -116,13 +116,13 @@ mixin _$MainViewModel on MainViewModelBase, Store {
   );
 
   @override
-  List<String> get searchedList {
+  List<ProductModel> get searchedList {
     _$searchedListAtom.reportRead();
     return super.searchedList;
   }
 
   @override
-  set searchedList(List<String> value) {
+  set searchedList(List<ProductModel> value) {
     _$searchedListAtom.reportWrite(value, super.searchedList, () {
       super.searchedList = value;
     });
@@ -165,6 +165,16 @@ mixin _$MainViewModel on MainViewModelBase, Store {
   Future<dynamic> fetchBrandsList(String categoryId) {
     return _$fetchBrandsListAsyncAction
         .run(() => super.fetchBrandsList(categoryId));
+  }
+
+  final _$searchProductsAsyncAction = AsyncAction(
+    'MainViewModelBase.searchProducts',
+  );
+
+  @override
+  Future<dynamic> searchProducts(String searchString) {
+    return _$searchProductsAsyncAction
+        .run(() => super.searchProducts(searchString));
   }
 
   final _$MainViewModelBaseActionController = ActionController(

@@ -2,10 +2,14 @@ import 'package:ecommerce/core/base/state/base_state.dart';
 import 'package:ecommerce/core/base/view/base_view.dart';
 import 'package:ecommerce/core/components/bottom_sheet/custom_bottom_sheet.dart';
 import 'package:ecommerce/core/components/card/setting_card.dart';
+import 'package:ecommerce/core/init/notifier/theme_notifier.dart';
 import 'package:ecommerce/core/projectstyles/project_styles.dart';
 import 'package:ecommerce/screen/main/account/viewmodel/account_view_model.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_mobx/flutter_mobx.dart';
+import 'package:provider/provider.dart';
+
+import '../../../core/constants/enums/app_theme_enum.dart';
 
 class AccountView extends StatefulWidget {
   const AccountView({Key key}) : super(key: key);
@@ -176,7 +180,8 @@ class _AccountViewState extends BaseState<AccountView> {
               leading: const Icon(Icons.settings),
               title: const Text("Ayarlar"),
               onTap: () {
-                Navigator.pop(context);
+                Provider.of<ThemeNotifier>(context, listen: false)
+                    .changeValue(AppThemeEnum.DARK);
               },
             ),
             const Divider(),
