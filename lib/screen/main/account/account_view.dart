@@ -164,7 +164,7 @@ class _AccountViewState extends BaseState<AccountView> {
   }
 
   Future<dynamic> _showMenuBottomSheet(
-      BuildContext context, AccountViewModel value) {
+      BuildContext context, AccountViewModel viewModel) {
     return showModalBottomSheet(
       shape: const RoundedRectangleBorder(
         borderRadius: BorderRadius.vertical(
@@ -177,21 +177,38 @@ class _AccountViewState extends BaseState<AccountView> {
           header: const Icon(Icons.menu),
           children: [
             ListTile(
+              leading: const Icon(Icons.dark_mode),
+              title: const Text("Gece Modu"),
+              trailing: Switch(
+                value: viewModel.darkTheme,
+                onChanged: (bool value) {
+                  if (value) {
+                    viewModel.darkTheme = true;
+                    Provider.of<ThemeNotifier>(context, listen: false)
+                        .changeValue(AppThemeEnum.DARK);
+                  } else {
+                    viewModel.darkTheme = false;
+                    Provider.of<ThemeNotifier>(context, listen: false)
+                        .changeValue(AppThemeEnum.LIGHT);
+                  }
+                },
+              ),
+            ),
+            const Divider(),
+            ListTile(
               leading: const Icon(Icons.settings),
               title: const Text("Ayarlar"),
-              onTap: () {
-                Provider.of<ThemeNotifier>(context, listen: false)
-                    .changeValue(AppThemeEnum.DARK);
-              },
+              onTap: () {},
             ),
             const Divider(),
             ListTile(
               leading: const Icon(Icons.exit_to_app),
               title: const Text("Çıkış Yap"),
               onTap: () {
-                value.logout();
+                viewModel.logout();
               },
             ),
+            const Divider(),
           ],
         );
       },

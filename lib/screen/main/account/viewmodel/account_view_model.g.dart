@@ -43,8 +43,9 @@ mixin _$AccountViewModel on AccountViewModelBase, Store {
     });
   }
 
-  final _$allNotificationsAtom =
-      Atom(name: 'AccountViewModelBase.allNotifications');
+  final _$allNotificationsAtom = Atom(
+    name: 'AccountViewModelBase.allNotifications',
+  );
 
   @override
   bool get allNotifications {
@@ -56,6 +57,23 @@ mixin _$AccountViewModel on AccountViewModelBase, Store {
   set allNotifications(bool value) {
     _$allNotificationsAtom.reportWrite(value, super.allNotifications, () {
       super.allNotifications = value;
+    });
+  }
+
+  final _$darkThemeAtom = Atom(
+    name: 'AccountViewModelBase.darkTheme',
+  );
+
+  @override
+  bool get darkTheme {
+    _$darkThemeAtom.reportRead();
+    return super.darkTheme;
+  }
+
+  @override
+  set darkTheme(bool value) {
+    _$darkThemeAtom.reportWrite(value, super.darkTheme, () {
+      super.darkTheme = value;
     });
   }
 
@@ -73,7 +91,8 @@ mixin _$AccountViewModel on AccountViewModelBase, Store {
     return '''
 userModel: ${userModel},
 emailVerified: ${emailVerified},
-allNotifications: ${allNotifications}
+allNotifications: ${allNotifications},
+darkTheme: ${darkTheme}
     ''';
   }
 }

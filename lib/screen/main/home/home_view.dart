@@ -251,7 +251,12 @@ class _HomeViewState extends BaseState<HomeView> with TickerProviderStateMixin {
                   onPressed: () {
                     viewModel.removeCount(viewModel.productList[index]);
                   },
-                  icon: Icon(Icons.remove)),
+                  icon: viewModel.productList[index].count == 1
+                      ? Icon(
+                          Icons.delete_forever_rounded,
+                          color: Colors.red,
+                        )
+                      : Icon(Icons.remove)),
               Text(viewModel.productList[index].count.toString()),
               IconButton(
                   onPressed: () {

@@ -140,7 +140,7 @@ class _MainViewState extends BaseState<MainView> {
                                     },
                                   )
                                 : const SizedBox.shrink()
-                            : const CircularProgressIndicator();
+                            : const SizedBox.shrink();
                       })
                     ],
                   );
@@ -195,10 +195,7 @@ class _MainViewState extends BaseState<MainView> {
                   ],
                 )
               : const SizedBox.shrink()
-          : const Padding(
-              padding: EdgeInsets.symmetric(vertical: 20.0, horizontal: 8),
-              child: LinearProgressIndicator(),
-            );
+          : const SizedBox.shrink();
     });
   }
 

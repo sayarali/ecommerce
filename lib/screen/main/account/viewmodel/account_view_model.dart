@@ -1,9 +1,12 @@
 import 'package:ecommerce/core/base/model/base_view_model.dart';
 import 'package:ecommerce/core/components/app_progress.dart';
+import 'package:ecommerce/core/init/notifier/theme_notifier.dart';
+import 'package:ecommerce/core/init/theme/app_theme_dark.dart';
 import 'package:ecommerce/core/model/user_model.dart';
 import 'package:ecommerce/core/service/firebase_auth_service.dart';
 import 'package:flutter/material.dart';
 import 'package:mobx/mobx.dart';
+import 'package:provider/provider.dart';
 
 part 'account_view_model.g.dart';
 
@@ -23,6 +26,9 @@ abstract class AccountViewModelBase with Store, BaseViewModel {
   @observable
   bool allNotifications = false;
 
+  @observable
+  bool darkTheme;
+
   @override
   void setContext(BuildContext context) {
     viewModelContext = context;
@@ -32,6 +38,8 @@ abstract class AccountViewModelBase with Store, BaseViewModel {
   void init() {
     fetchUserData();
     isEmailVerified();
+    darkTheme = Provider.of<ThemeNotifier>(viewModelContext).currentTheme ==
+        AppThemeDark.instance.theme;
   }
 
   @action
