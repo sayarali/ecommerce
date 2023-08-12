@@ -252,8 +252,7 @@ class _MainViewState extends BaseState<MainView> {
               : const Text("Bu kategoride hiç ürün yok.")
           : const Padding(
               padding: EdgeInsets.symmetric(vertical: 20.0, horizontal: 8),
-              child: LinearProgressIndicator(),
-            );
+              child: LinearProgressIndicator());
     });
   }
 
