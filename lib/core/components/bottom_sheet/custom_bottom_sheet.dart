@@ -3,11 +3,9 @@ import 'package:flutter/material.dart';
 class CustomBottomSheet extends StatelessWidget {
   final Widget header;
   final List<Widget> children;
-
   const CustomBottomSheet(
       {Key key, @required this.header, @required this.children})
       : super(key: key);
-
   @override
   Widget build(BuildContext context) {
     return SingleChildScrollView(

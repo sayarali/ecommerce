@@ -6,7 +6,6 @@ import 'package:flutter/material.dart';
 class ThemeNotifier extends ChangeNotifier {
   ThemeData _currentTheme = AppThemeLight.instance.theme;
   ThemeData get currentTheme => _currentTheme;
-
   void changeValue(AppThemeEnum theme) {
     switch (theme) {
       case AppThemeEnum.LIGHT:

@@ -92,7 +92,7 @@ class _CategoriesViewState extends BaseState<CategoriesView> {
                         crossAxisCount: 2,
                       ),
                     )
-                  : LinearProgressIndicator();
+                  : const LinearProgressIndicator();
             })),
       );
 }

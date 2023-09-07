@@ -13,11 +13,8 @@ import '../../model/product_model.dart';
 
 class NavigationRoute {
   NavigationRoute._init();
-
   static final NavigationRoute _instance = NavigationRoute._init();
-
   static NavigationRoute get instance => _instance;
-
   Route<dynamic> generateRoute(RouteSettings args) {
     switch (args.name) {
       case NavigationConstants.SPLASH_SCREEN:

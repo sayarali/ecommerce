@@ -23,7 +23,6 @@ abstract class ProductDetailsViewModelBase with Store, BaseViewModel {
 
   @observable
   List<String> imagesUrls;
-
   @action
   Future getImagesUrl(String productId) async {
     try {

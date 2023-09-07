@@ -36,7 +36,6 @@ class _AccountViewState extends BaseState<AccountView> {
           backgroundColor: Colors.transparent,
           elevation: 0.0,
           leading: const Icon(Icons.account_box),
-          iconTheme: IconThemeData(color: themeData.colorScheme.onBackground),
           title: Text(
             "Hesabım",
             style: themeData.textTheme.titleLarge.copyWith(
@@ -51,8 +50,6 @@ class _AccountViewState extends BaseState<AccountView> {
                 },
                 icon: Icon(Icons.menu)),
           ],
-          actionsIconTheme:
-              IconThemeData(color: themeData.colorScheme.onBackground),
         ),
         body: SingleChildScrollView(
             padding: const EdgeInsets.symmetric(vertical: 20, horizontal: 12),

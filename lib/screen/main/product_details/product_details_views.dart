@@ -136,14 +136,14 @@ class _ProductDetailsViewState extends BaseState<ProductDetailsView> {
                     width: 8,
                   ),
                   ElevatedButton.icon(
-                    icon: Icon(Icons.add_shopping_cart_rounded),
+                    icon: const Icon(Icons.add_shopping_cart_rounded),
                     onPressed: () async {
                       await FirebaseService()
                           .addBasket(widget.productModel.productId, 1);
-                      ScaffoldMessenger.of(context).showSnackBar(
-                          SnackBar(content: Text("Ürün sepete eklendi.")));
+                      ScaffoldMessenger.of(context).showSnackBar(const SnackBar(
+                          content: Text("Ürün sepete eklendi.")));
                     },
-                    label: Text("Sepete Ekle"),
+                    label: const Text("Sepete Ekle"),
                     style: ButtonStyle(
                         backgroundColor: MaterialStateProperty.all(
                             themeData.colorScheme.secondary)),

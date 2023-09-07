@@ -1,9 +1,9 @@
-import 'package:ecommerce/core/init/navigation/navigation_service.dart';
 import 'package:ecommerce/core/model/brand_model.dart';
 import 'package:ecommerce/core/projectstyles/project_styles.dart';
 import 'package:flutter/material.dart';
 
 import '../../constants/navigation/navigation_constants.dart';
+import '../../init/navigation/navigation_service.dart';
 
 class BrandCard extends StatelessWidget {
   const BrandCard({Key key, this.brandModel}) : super(key: key);

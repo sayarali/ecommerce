@@ -60,7 +60,6 @@ abstract class MainViewModelBase with Store, BaseViewModel {
     selectedCategory = categoryName;
     fetchPopularProductsList(selectedCategory);
     fetchNewProductsList(selectedCategory);
-    fetchBrandsList(selectedCategory);
   }
 
   @action

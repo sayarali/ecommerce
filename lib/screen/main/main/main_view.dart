@@ -37,7 +37,7 @@ class _MainViewState extends BaseState<MainView> {
                   ? IconButton(
                       onPressed: () => viewModel.changeSearch(),
                       icon: Icon(Icons.arrow_back_ios_new))
-                  : Icon(Icons.home_rounded);
+                  : const Icon(Icons.home_rounded);
             },
           ),
           title: Observer(
@@ -283,7 +283,7 @@ class _MainViewState extends BaseState<MainView> {
   Widget _buildSearchField(MainViewModel viewModel) {
     return TextField(
       controller: viewModel.searchController,
-      decoration: InputDecoration(
+      decoration: const InputDecoration(
         hintText: "Arama yap...",
         border: InputBorder.none,
       ),

@@ -5,7 +5,6 @@ class AppThemeDark extends AppTheme {
   static AppThemeDark _instance = AppThemeDark._init();
   static AppThemeDark get instance => _instance;
   AppThemeDark._init();
-
   ThemeData get theme => ThemeData(
       primaryColor: Colors.black,
       colorScheme: const ColorScheme(

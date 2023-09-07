@@ -23,7 +23,6 @@ abstract class CategoriesViewModelBase with Store, BaseViewModel {
 
   @observable
   List<CategoryModel> categoryList;
-
   @action
   Future fetchCategoryList() async {
     try {
